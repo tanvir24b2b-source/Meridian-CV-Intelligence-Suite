@@ -3,12 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Screener</title>
+    <title>Meridian CV Intelligence Suite</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the CV Screener</h1>
-    <p>Please upload your CV for screening.</p>
-    <input type="file" accept="application/pdf" />
-    <button type="submit">Upload</button>
+    <header>
+        <h1>Meridian CV Intelligence Suite</h1>
+    </header>
+    <main>
+        <section id="ai-analysis">
+            <h2>AI Analysis</h2>
+            <p>Integrate AI for evaluating candidates' skills and potential.</p>
+        </section>
+        <section id="candidate-screening">
+            <h2>Candidate Screening</h2>
+            <form id="screening-form">
+                <label for="candidate-name">Candidate Name:</label>
+                <input type="text" id="candidate-name" name="candidate-name" required>
+                <label for="candidate-cv">Upload CV:</label>
+                <input type="file" id="candidate-cv" name="candidate-cv" accept="application/pdf" required>
+                <button type="submit">Screen Candidate</button>
+            </form>
+        </section>
+        <section id="interview-framework">
+            <h2>Interview Framework Generation</h2>
+            <p>Generate interview questions based on CV analysis.</p>
+        </section>
+        <section id="export-functionality">
+            <h2>Excel Export Functionality</h2>
+            <button id="export-btn">Export to Excel</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Meridian CV Intelligence Suite</p>
+    </footer>
+    <script src="app.js"></script>
 </body>
 </html>
