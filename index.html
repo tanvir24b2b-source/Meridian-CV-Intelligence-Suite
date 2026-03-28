@@ -3,14 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Meridian — CV Screening Suite</title>
+<title>Meridian v2 — CV Screening Suite</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-
-<!-- PDF.js for browser-side PDF text extraction (no server needed) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<!-- SheetJS for Excel export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
 <style>
 :root{
   --ink:#0d0f14;--ink2:#161921;--ink3:#1e2230;
@@ -18,14 +14,15 @@
   --gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,.1);
   --slate:#8a91a8;--text:#e4e7f0;--text2:#b0b6ca;
   --success:#3db87a;--danger:#e05c6e;--warn:#e0945c;--blue:#5b8dee;
+  --purple:#9b7fe8;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--ink);color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,.015)'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
 
-/* HEADER */
-header{position:sticky;top:0;z-index:200;background:rgba(13,15,20,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;padding:0 40px;gap:18px;}
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:200;background:rgba(13,15,20,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;padding:0 40px;gap:18px;}
 .brand{display:flex;align-items:center;gap:11px;}
 .brand-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),#a07830);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:15px;color:#0d0f14;flex-shrink:0;}
 .brand-name{font-family:'Playfair Display',serif;font-weight:700;font-size:18px;color:var(--text);letter-spacing:-.3px;}
@@ -42,30 +39,28 @@ header{position:sticky;top:0;z-index:200;background:rgba(13,15,20,.95);backdrop-
 .pl{width:18px;height:1px;background:var(--line);transition:background .3s;}
 .pl.done{background:var(--success);}
 
-/* MAIN */
-main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:48px 36px 96px;}
+/* ── MAIN ── */
+main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:48px 36px 96px;}
 .panel{display:none;}
 .panel.active{display:block;animation:riseIn .4s cubic-bezier(.22,.68,0,1.2) both;}
 @keyframes riseIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 #p2{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:64vh;gap:22px;text-align:center;}
 #p2.active{display:flex;}
 
-/* TYPOGRAPHY */
+/* ── TYPE ── */
 .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;}
 .page-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;line-height:1.1;color:var(--text);margin-bottom:6px;}
 .page-title em{color:var(--gold);font-style:normal;}
-.page-desc{font-size:13px;color:var(--slate);margin-bottom:40px;max-width:520px;line-height:1.65;}
+.page-desc{font-size:13px;color:var(--slate);margin-bottom:40px;max-width:560px;line-height:1.65;}
 .sec-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);margin-bottom:11px;display:flex;align-items:center;gap:9px;}
 .sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
 
-/* CARDS */
+/* ── CARDS ── */
 .card{background:var(--ink2);border:1px solid var(--line);border-radius:11px;padding:26px 28px;margin-bottom:13px;}
-
-/* NOTICE BOX */
 .notice{background:rgba(91,141,238,.06);border:1px solid rgba(91,141,238,.18);border-radius:8px;padding:11px 16px;font-size:12px;color:#86aadc;font-family:'JetBrains Mono',monospace;line-height:1.65;margin-bottom:13px;}
 .notice strong{color:var(--blue);}
 
-/* FORMS */
+/* ── FORMS ── */
 .fg{display:flex;flex-direction:column;gap:5px;}
 .fl{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--slate);font-family:'JetBrains Mono',monospace;}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-bottom:13px;}
@@ -76,7 +71,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 select option{background:var(--ink3);}
 textarea{resize:vertical;min-height:84px;line-height:1.6;}
 
-/* COUNTRY */
+/* ── COUNTRY PICKER ── */
 .ctry-wrap{position:relative;}
 .ctry-dd{position:absolute;top:calc(100%+5px);left:0;right:0;z-index:600;background:var(--ink3);border:1px solid var(--line);border-radius:8px;max-height:220px;overflow-y:auto;display:none;box-shadow:0 14px 40px rgba(0,0,0,.6);}
 .ctry-dd.open{display:block;}
@@ -87,7 +82,7 @@ textarea{resize:vertical;min-height:84px;line-height:1.6;}
 .c-nm{flex:1;}
 .c-reg{font-size:10px;color:var(--slate);font-family:'JetBrains Mono',monospace;}
 
-/* DROP ZONE */
+/* ── DROP ZONE ── */
 .dz{border:1px dashed var(--line2);border-radius:9px;padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--ink3);position:relative;}
 .dz:hover,.dz.hover{border-color:var(--gold);background:var(--gold-dim);}
 .dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;border:none;}
@@ -100,23 +95,23 @@ textarea{resize:vertical;min-height:84px;line-height:1.6;}
 .dz-type.no{border-color:rgba(224,92,110,.2);color:rgba(224,92,110,.5);text-decoration:line-through;}
 .f-pills{display:flex;flex-direction:column;gap:5px;margin-top:11px;}
 .f-pill{display:flex;align-items:center;gap:9px;background:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:7px 11px;font-size:12px;}
-.fp-ic{font-size:13px;}
 .fp-nm{flex:1;font-family:'JetBrains Mono',monospace;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .fp-sz{color:var(--slate);font-size:11px;white-space:nowrap;}
 .fp-del{background:none;border:none;cursor:pointer;color:var(--slate);font-size:13px;padding:2px 5px;border-radius:3px;transition:color .18s;line-height:1;}
 .fp-del:hover{color:var(--danger);}
 
-/* BUTTONS */
+/* ── BUTTONS ── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 24px;border-radius:7px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;cursor:pointer;border:none;outline:none;transition:all .2s;letter-spacing:.02em;white-space:nowrap;}
 .btn-p{background:linear-gradient(135deg,var(--gold),#a07828);color:#0d0f14;box-shadow:0 4px 16px rgba(201,168,76,.22);}
 .btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.36);}
 .btn-o{background:transparent;border:1px solid var(--line);color:var(--slate);}
 .btn-o:hover{border-color:var(--gold);color:var(--gold);}
 .btn-s{background:linear-gradient(135deg,#2da866,#1e8a52);color:#fff;box-shadow:0 4px 14px rgba(61,184,122,.18);}
-.btn-s:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(61,184,122,.3);}
+.btn-s:hover{transform:translateY(-2px);}
+.btn-sm{padding:6px 13px;font-size:11px;border-radius:5px;}
 .btn-row{display:flex;gap:9px;flex-wrap:wrap;}
 
-/* LOADER */
+/* ── LOADER ── */
 .l-ring{width:52px;height:52px;position:relative;}
 .l-ring::before,.l-ring::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;}
 .l-ring::before{border-top-color:var(--gold);animation:spin .85s linear infinite;}
@@ -131,52 +126,96 @@ textarea{resize:vertical;min-height:84px;line-height:1.6;}
 .l-step.done{border-color:rgba(61,184,122,.16);background:rgba(61,184,122,.05);color:var(--success);}
 .l-ic{width:15px;text-align:center;flex-shrink:0;font-size:13px;}
 
-/* RESULTS */
+/* ── RESULTS DIVIDERS ── */
 .sdiv{display:flex;align-items:center;gap:16px;margin:36px 0 20px;}
 .sdiv-l{flex:1;height:1px;background:var(--line);}
 .sdiv-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--slate);white-space:nowrap;}
 .sdiv-cnt{background:var(--gold-dim);border:1px solid rgba(201,168,76,.17);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;padding:2px 9px;border-radius:3px;}
 
-/* CANDIDATE CARDS */
-.cg{display:grid;gap:11px;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));}
-.cc{background:var(--ink2);border:1px solid var(--line);border-radius:11px;padding:20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;}
-.cc:hover{transform:translateY(-3px);border-color:var(--line2);box-shadow:0 8px 26px rgba(0,0,0,.28);}
-.cc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.c-g::after{background:linear-gradient(90deg,var(--gold),var(--gold2));}
-.c-s::after{background:linear-gradient(90deg,#9ea8b8,#c8d0dd);}
-.c-b::after{background:linear-gradient(90deg,#c47b3a,#e09858);}
-.c-r::after{background:linear-gradient(90deg,var(--danger),#b03050);}
-.rank-b{position:absolute;top:16px;right:16px;font-size:19px;}
-.c-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text);margin-bottom:3px;padding-right:34px;}
-.c-meta{font-size:10px;color:var(--slate);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
-.sc-row{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
-.sc-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1;min-width:50px;}
-.sc-num.hi{color:var(--success);}
-.sc-num.md{color:var(--gold);}
-.sc-num.lo{color:var(--danger);}
-.sc-track{flex:1;height:3px;background:var(--ink3);border-radius:2px;overflow:hidden;}
-.sc-bar{height:100%;border-radius:2px;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
-.bg{background:linear-gradient(90deg,var(--success),#5de0a0);}
-.by{background:linear-gradient(90deg,var(--gold),var(--gold2));}
-.br{background:linear-gradient(90deg,var(--danger),#f08098);}
-.stags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
-.stag{background:rgba(91,141,238,.08);border:1px solid rgba(91,141,238,.15);color:var(--blue);font-size:10px;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:3px;}
-.stag-r{background:rgba(224,92,110,.07);border-color:rgba(224,92,110,.17);color:var(--danger);}
-.r-box{border-top:1px solid var(--line);padding-top:10px;margin-top:10px;font-size:12px;color:var(--text2);line-height:1.6;}
-.r-box b{color:var(--text);font-weight:600;}
-.ct-strip{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
-.chip{display:inline-flex;align-items:center;gap:4px;background:var(--ink3);border:1px solid var(--line);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .16s;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.chip:hover{border-color:var(--gold);color:var(--gold);}
-.score-detail{margin-top:9px;display:flex;flex-wrap:wrap;gap:4px;}
-.sd-chip{font-size:10px;font-family:'JetBrains Mono',monospace;padding:2px 6px;border-radius:3px;background:var(--ink3);border:1px solid var(--line);color:var(--slate);}
+/* ── RATING BADGES ── */
+.rating-badge{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:4px 11px;border-radius:4px;letter-spacing:.04em;}
+.rb-excellent{background:rgba(61,184,122,.12);color:#3db87a;border:1px solid rgba(61,184,122,.25);}
+.rb-strong{background:rgba(91,141,238,.1);color:#5b8dee;border:1px solid rgba(91,141,238,.22);}
+.rb-moderate{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.22);}
+.rb-weak{background:rgba(224,148,92,.1);color:var(--warn);border:1px solid rgba(224,148,92,.22);}
+.rb-no{background:rgba(224,92,110,.09);color:var(--danger);border:1px solid rgba(224,92,110,.2);}
 
-/* TABLES */
+/* ── CANDIDATE CARD v2 ── */
+.cg{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));}
+.cc{background:var(--ink2);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.cc:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.cc-top{height:3px;}
+.cc-top.excellent{background:linear-gradient(90deg,#3db87a,#5de0a0);}
+.cc-top.strong{background:linear-gradient(90deg,#5b8dee,#8ab4f5);}
+.cc-top.moderate{background:linear-gradient(90deg,var(--gold),var(--gold2));}
+.cc-top.weak{background:linear-gradient(90deg,var(--warn),#edb07a);}
+.cc-top.no{background:linear-gradient(90deg,var(--danger),#f08098);}
+.cc-body{padding:18px 20px;}
+.cc-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;}
+.cc-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:var(--text);line-height:1.2;}
+.cc-file{font-size:10px;color:var(--slate);font-family:'JetBrains Mono',monospace;margin-top:3px;}
+.cc-rank{font-family:'JetBrains Mono',monospace;font-size:22px;line-height:1;opacity:.7;}
+
+/* Score total row */
+.cc-score-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cc-score-big{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;line-height:1;}
+.cc-score-big.excellent{color:#3db87a;}
+.cc-score-big.strong{color:#5b8dee;}
+.cc-score-big.moderate{color:var(--gold);}
+.cc-score-big.weak{color:var(--warn);}
+.cc-score-big.no{color:var(--danger);}
+.cc-score-meta{display:flex;flex-direction:column;gap:4px;}
+.cc-score-max{font-size:11px;color:var(--slate);font-family:'JetBrains Mono',monospace;}
+
+/* Score breakdown bars */
+.breakdown{margin-bottom:14px;}
+.breakdown-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.br-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--slate);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.br-bar-wrap{flex:1;height:4px;background:var(--ink3);border-radius:2px;overflow:hidden;}
+.br-bar{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.br-val{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text2);width:28px;text-align:right;flex-shrink:0;}
+
+/* Strengths / weaknesses */
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.sw-box{border-radius:7px;padding:10px 12px;}
+.sw-box.strengths{background:rgba(61,184,122,.05);border:1px solid rgba(61,184,122,.12);}
+.sw-box.weaknesses{background:rgba(224,92,110,.04);border:1px solid rgba(224,92,110,.11);}
+.sw-title{font-size:10px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px;}
+.sw-box.strengths .sw-title{color:var(--success);}
+.sw-box.weaknesses .sw-title{color:var(--danger);}
+.sw-item{font-size:11px;color:var(--text2);line-height:1.5;display:flex;gap:5px;margin-bottom:3px;}
+.sw-item::before{flex-shrink:0;font-size:9px;margin-top:2px;}
+.sw-box.strengths .sw-item::before{content:'✓';color:var(--success);}
+.sw-box.weaknesses .sw-item::before{content:'✗';color:var(--danger);}
+
+/* Recommendation box */
+.rec-box{border-radius:7px;padding:10px 13px;margin-bottom:14px;font-size:12px;line-height:1.6;}
+.rec-box.yes{background:rgba(61,184,122,.05);border:1px solid rgba(61,184,122,.12);}
+.rec-box.no{background:rgba(224,92,110,.04);border:1px solid rgba(224,92,110,.11);}
+.rec-box b{display:block;font-size:10px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.rec-box.yes b{color:var(--success);}
+.rec-box.no b{color:var(--danger);}
+
+/* Contact strip */
+.cc-contact{border-top:1px solid var(--line);padding-top:12px;margin-bottom:12px;}
+.cc-contact-row{display:flex;align-items:center;gap:7px;margin-bottom:4px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text2);}
+.cc-contact-row .lbl{color:var(--slate);width:60px;flex-shrink:0;}
+.cc-contact-row .val{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cc-contact-row .val a{color:var(--blue);text-decoration:none;}
+.cc-contact-row .val a:hover{text-decoration:underline;}
+
+/* Invite buttons */
+.invite-strip{display:flex;gap:6px;flex-wrap:wrap;}
+.invite-btn{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:'JetBrains Mono',monospace;padding:5px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--line);background:var(--ink3);color:var(--text2);transition:all .18s;}
+.invite-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Tables */
 .tw{overflow-x:auto;border-radius:8px;border:1px solid var(--line);}
 table{width:100%;border-collapse:collapse;font-size:12px;}
 thead th{background:var(--ink3);padding:10px 13px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--slate);border-bottom:1px solid var(--line);white-space:nowrap;}
 tbody td{padding:9px 13px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;color:var(--text2);}
 tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:rgba(201,168,76,.022);}
+tbody tr:hover td{background:rgba(201,168,76,.02);}
 .tn{font-family:'JetBrains Mono',monospace;color:var(--slate);font-size:11px;}
 .qcat{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
 .qt{background:rgba(91,141,238,.09);color:var(--blue);}
@@ -190,29 +229,54 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
 .sb-ok{background:rgba(61,184,122,.09);color:var(--success);border:1px solid rgba(61,184,122,.17);}
 .sb-no{background:rgba(224,92,110,.09);color:var(--danger);border:1px solid rgba(224,92,110,.17);}
 
-/* BRIEF + MSG */
+/* Brief */
 .brief-box{background:var(--gold-dim);border:1px solid rgba(201,168,76,.17);border-radius:9px;padding:18px 20px;font-size:13px;color:var(--text2);line-height:1.7;}
 .brief-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;display:flex;align-items:center;gap:6px;}
 .brief-lbl::before{content:'◆';font-size:7px;}
-.msg-b{background:var(--ink3);border:1px solid var(--line);border-radius:8px;padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:var(--text2);white-space:pre-wrap;position:relative;word-break:break-word;}
-.cp-btn{position:absolute;top:10px;right:10px;background:var(--ink2);border:1px solid var(--line);color:var(--slate);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all .18s;}
-.cp-btn:hover{border-color:var(--gold);color:var(--gold);}
-.ctry-note{display:none;margin-top:11px;padding:11px 15px;background:rgba(100,180,220,.06);border:1px solid rgba(100,180,220,.17);border-radius:7px;font-size:11px;color:#86c8e0;font-family:'JetBrains Mono',monospace;line-height:1.6;}
 
-/* TOAST */
+/* Modal for invite message */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:8000;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:24px;width:90%;max-width:540px;max-height:80vh;overflow-y:auto;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--text);}
+.modal-close{background:none;border:none;color:var(--slate);font-size:20px;cursor:pointer;line-height:1;padding:2px 6px;}
+.modal-close:hover{color:var(--danger);}
+.modal-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.mtab{font-size:11px;font-family:'JetBrains Mono',monospace;padding:5px 12px;border-radius:5px;cursor:pointer;border:1px solid var(--line);color:var(--slate);background:var(--ink3);}
+.mtab.active{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);}
+.msg-b{background:var(--ink3);border:1px solid var(--line);border-radius:8px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:var(--text2);white-space:pre-wrap;word-break:break-word;margin-bottom:10px;}
+.cp-btn{background:var(--ink2);border:1px solid var(--line);color:var(--slate);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:6px 14px;border-radius:5px;cursor:pointer;transition:all .18s;display:inline-flex;align-items:center;gap:5px;}
+.cp-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+/* Ranking explanation */
+.rank-explain{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:12px;}
+.rank-row{display:flex;gap:12px;align-items:flex-start;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line);}
+.rank-row:last-child{padding-bottom:0;margin-bottom:0;border-bottom:none;}
+.rank-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1;flex-shrink:0;}
+.rank-num.r1{color:var(--gold);}
+.rank-num.r2{color:var(--slate);}
+.rank-num.r3{color:#c47b3a;}
+.rank-info{flex:1;}
+.rank-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.rank-why{font-size:12px;color:var(--text2);line-height:1.6;}
+
+/* Toast */
 .toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--ink3);border:1px solid var(--gold);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 16px;border-radius:7px;opacity:0;transform:translateY(9px);transition:all .26s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
+
+/* Contact table */
+.chip{display:inline-flex;align-items:center;gap:4px;background:var(--ink3);border:1px solid var(--line);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer;font-family:'JetBrains Mono',monospace;transition:all .16s;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chip:hover{border-color:var(--gold);color:var(--gold);}
 
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:var(--ink);}
 ::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px;}
 @media(max-width:680px){
-  header{padding:0 16px;}
-  main{padding:28px 12px 64px;}
-  .page-title{font-size:28px;}
-  .cg{grid-template-columns:1fr;}
-  .fgrid{grid-template-columns:1fr;}
-  .card{padding:18px 16px;}
+  header{padding:0 16px;}main{padding:28px 12px 64px;}
+  .page-title{font-size:26px;}.cg{grid-template-columns:1fr;}
+  .fgrid{grid-template-columns:1fr;}.card{padding:18px 16px;}
+  .sw-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -224,11 +288,11 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
     <div class="brand-mark">M</div>
     <div>
       <div class="brand-name">Meridian<span>.</span></div>
-      <div class="brand-tagline">CV Intelligence Suite</div>
+      <div class="brand-tagline">CV Intelligence Suite v2</div>
     </div>
   </div>
   <div class="h-sep"></div>
-  <div class="h-chip">Offline Rule-Based Engine</div>
+  <div class="h-chip">Offline Engine · Bangladesh Mode</div>
   <div class="h-badge">100% Browser · No API</div>
   <div class="h-right">
     <div class="prog-wrap">
@@ -242,46 +306,34 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
 </header>
 
 <main>
-
-<!-- ═══ PANEL 1 — Configuration ═══ -->
+<!-- ═══ PANEL 1 ═══ -->
 <div class="panel active" id="p1">
   <div class="eyebrow">Configuration</div>
   <div class="page-title">Position <em>Criteria</em></div>
-  <div class="page-desc">Define the role requirements and upload candidate CVs. Scoring runs entirely in your browser — no internet connection, no API key, no data leaves your device.</div>
+  <div class="page-desc">Define the role and upload CVs. Scoring runs fully offline in your browser. Select Bangladesh to enable Bangla/Banglish interview questions and invitation templates.</div>
 
   <div class="sec-lbl">Role Information</div>
   <div class="card">
     <div class="fgrid">
-      <div class="fg">
-        <label class="fl">Industry Sector</label>
-        <input type="text" id="industry" placeholder="e.g. E-commerce, Financial Services…">
-      </div>
-      <div class="fg">
-        <label class="fl">Position / Job Title</label>
-        <input type="text" id="role" placeholder="e.g. Marketing Manager, Sales Executive…">
-      </div>
+      <div class="fg"><label class="fl">Industry Sector</label><input type="text" id="industry" placeholder="e.g. E-commerce, Social Media Agency…"></div>
+      <div class="fg"><label class="fl">Position / Job Title</label><input type="text" id="role" placeholder="e.g. Facebook Moderator, Inbox Manager…"></div>
     </div>
     <div class="fgrid">
-      <div class="fg">
-        <label class="fl">Experience Level</label>
+      <div class="fg"><label class="fl">Experience Level</label>
         <select id="expLevel">
           <option value="any">Any Level</option>
           <option value="entry">Junior (0–2 years)</option>
           <option value="mid">Mid-Level (3–5 years)</option>
           <option value="senior">Senior (6–10 years)</option>
-          <option value="lead">Lead / Principal (10+ years)</option>
+          <option value="lead">Lead / Principal (10+)</option>
           <option value="executive">Executive / Director</option>
-          <option value="csuite">C-Suite</option>
         </select>
       </div>
-      <div class="fg">
-        <label class="fl">Number of Vacancies</label>
-        <input type="number" id="numPos" value="1" min="1" max="99">
-      </div>
+      <div class="fg"><label class="fl">Number of Vacancies</label><input type="number" id="numPos" value="1" min="1" max="99"></div>
     </div>
     <div class="fg">
-      <label class="fl">Key Requirements / Skills to Match</label>
-      <textarea id="reqs" placeholder="List specific skills, tools, or qualifications separated by commas or new lines. The more specific you are, the better the scoring accuracy.&#10;&#10;e.g. Excel, PowerPoint, Team Management, Digital Marketing, Google Analytics…"></textarea>
+      <label class="fl">Key Skills / Requirements (comma or newline separated)</label>
+      <textarea id="reqs" placeholder="e.g. Facebook page management, inbox handling, comment moderation, Canva, customer communication, order tracking, Bangla typing…"></textarea>
     </div>
   </div>
 
@@ -290,21 +342,19 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
     <div class="fg" style="max-width:400px;">
       <label class="fl">Country / Region</label>
       <div class="ctry-wrap">
-        <input type="text" id="ctryInput" placeholder="Search and select a country…" autocomplete="off"
-          oninput="filterCtry(this.value)" onfocus="openCtry()" onblur="setTimeout(closeCtry,180)">
+        <input type="text" id="ctryInput" placeholder="Search country… (select Bangladesh for BD mode)"
+          autocomplete="off" oninput="filterCtry(this.value)" onfocus="openCtry()" onblur="setTimeout(closeCtry,180)">
         <div class="ctry-dd" id="ctryDd"></div>
       </div>
       <input type="hidden" id="ctryVal">
     </div>
     <p style="margin-top:11px;font-size:11px;color:var(--slate);line-height:1.6;font-family:'JetBrains Mono',monospace;">
-      Country selection customises interview questions with local compliance topics and professional standards.
+      🇧🇩 Selecting Bangladesh activates Bangla + Banglish interview questions and BD-market invitation templates.
     </p>
   </div>
 
   <div class="sec-lbl">Candidate Documents</div>
-  <div class="notice">
-    <strong>Supported formats:</strong> PDF (text-based) and TXT only. DOCX is not supported in browser-only mode — please ask candidates to save their CV as PDF or export to TXT. Scanned/image-only PDFs cannot be read and will score 0.
-  </div>
+  <div class="notice"><strong>Supported:</strong> PDF (text-based) and TXT. DOCX not supported in offline mode. Scanned/image PDFs cannot be read and will score 0. Ask candidates to submit text-based PDF or TXT export.</div>
   <div class="card">
     <div class="dz" id="dz">
       <input type="file" id="fileInput" multiple accept=".pdf,.txt">
@@ -314,7 +364,6 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
         <span class="dz-type ok">PDF</span>
         <span class="dz-type ok">TXT</span>
         <span class="dz-type no">DOCX</span>
-        <span class="dz-type no">DOC</span>
       </div>
     </div>
     <div class="f-pills" id="fPills"></div>
@@ -325,753 +374,871 @@ tbody tr:hover td{background:rgba(201,168,76,.022);}
   </div>
 </div>
 
-<!-- ═══ PANEL 2 — Processing ═══ -->
+<!-- ═══ PANEL 2 ═══ -->
 <div class="panel" id="p2">
   <div class="l-ring"></div>
   <div class="l-title">Analysing Candidates</div>
-  <div class="l-sub">Processing locally — no data leaves your browser</div>
+  <div class="l-sub">Processing locally — nothing leaves your browser</div>
   <div class="l-steps">
     <div class="l-step" id="ls1"><span class="l-ic">⬡</span>Reading CV files</div>
-    <div class="l-step" id="ls2"><span class="l-ic">⬡</span>Extracting text content</div>
-    <div class="l-step" id="ls3"><span class="l-ic">⬡</span>Scoring candidates</div>
-    <div class="l-step" id="ls4"><span class="l-ic">⬡</span>Ranking &amp; comparing profiles</div>
+    <div class="l-step" id="ls2"><span class="l-ic">⬡</span>Extracting text &amp; contact info</div>
+    <div class="l-step" id="ls3"><span class="l-ic">⬡</span>Scoring all candidates</div>
+    <div class="l-step" id="ls4"><span class="l-ic">⬡</span>Ranking &amp; generating ratings</div>
     <div class="l-step" id="ls5"><span class="l-ic">⬡</span>Building interview framework</div>
-    <div class="l-step" id="ls6"><span class="l-ic">⬡</span>Preparing final report</div>
+    <div class="l-step" id="ls6"><span class="l-ic">⬡</span>Preparing invitation messages</div>
   </div>
 </div>
 
-<!-- ═══ PANEL 3 — Results ═══ -->
+<!-- ═══ PANEL 3 ═══ -->
 <div class="panel" id="p3">
   <div class="eyebrow">Analysis Complete</div>
   <div class="page-title">Candidate <em>Evaluation</em></div>
   <div class="page-desc" id="rDesc"></div>
 
   <div class="btn-row" style="margin-bottom:28px;">
-    <button class="btn btn-s" onclick="exportExcel()">↓&nbsp; Export Report (.xlsx)</button>
+    <button class="btn btn-s" onclick="exportExcel()">↓&nbsp; Export Full Report (.xlsx)</button>
     <button class="btn btn-o" onclick="resetApp()">←&nbsp; New Assessment</button>
   </div>
 
   <!-- Position Brief -->
   <div class="sec-lbl">Position Brief</div>
   <div class="brief-box">
-    <div class="brief-lbl">Enhanced Job Specification</div>
+    <div class="brief-lbl">Screening Brief</div>
     <div id="briefTxt" style="font-size:13px;line-height:1.7;"></div>
   </div>
-  <div style="display:flex;justify-content:flex-end;margin-top:7px;">
-    <button class="btn btn-o" style="padding:6px 14px;font-size:12px;" onclick="copyEl('briefTxt')">Copy Brief</button>
-  </div>
-  <div class="ctry-note" id="ctryNote"></div>
 
-  <!-- Top Candidates -->
-  <div class="sdiv">
-    <div class="sdiv-l"></div>
-    <div class="sdiv-lbl">Recommended Candidates</div>
-    <div class="sdiv-cnt" id="topCnt">0</div>
-    <div class="sdiv-l"></div>
-  </div>
+  <!-- Top 3 Ranking Explanation -->
+  <div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-lbl">Why These Candidates Are Ranked</div><div class="sdiv-l"></div></div>
+  <div id="rankExplain"></div>
+
+  <!-- Recommended -->
+  <div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-lbl">Recommended Candidates</div><div class="sdiv-cnt" id="topCnt">0</div><div class="sdiv-l"></div></div>
   <div class="cg" id="topGrid"></div>
 
-  <!-- Rejected -->
-  <div class="sdiv">
-    <div class="sdiv-l"></div>
-    <div class="sdiv-lbl">Not Recommended</div>
-    <div class="sdiv-cnt" id="rejCnt">0</div>
-    <div class="sdiv-l"></div>
-  </div>
+  <!-- Not Recommended -->
+  <div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-lbl">Not Recommended</div><div class="sdiv-cnt" id="rejCnt">0</div><div class="sdiv-l"></div></div>
   <div class="cg" id="rejGrid"></div>
 
   <!-- Interview Questions -->
-  <div class="sdiv">
-    <div class="sdiv-l"></div>
-    <div class="sdiv-lbl">Interview Framework</div>
-    <div class="sdiv-l"></div>
-  </div>
+  <div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-lbl">Interview Framework</div><div class="sdiv-l"></div></div>
   <div class="card" style="padding:0;">
     <div class="tw">
       <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Category</th>
-            <th>Question</th>
-            <th>Assessment Focus</th>
-            <th>Ideal Answer Parameters</th>
-          </tr>
-        </thead>
+        <thead><tr><th>#</th><th>Category</th><th>Question</th><th>What to Assess</th><th>Ideal Answer</th></tr></thead>
         <tbody id="qBody"></tbody>
       </table>
     </div>
   </div>
 
   <!-- Contact Directory -->
-  <div class="sdiv">
-    <div class="sdiv-l"></div>
-    <div class="sdiv-lbl">Contact Directory</div>
-    <div class="sdiv-l"></div>
-  </div>
+  <div class="sdiv"><div class="sdiv-l"></div><div class="sdiv-lbl">Contact Directory</div><div class="sdiv-l"></div></div>
   <div class="card" style="padding:0;">
     <div class="tw">
       <table>
-        <thead>
-          <tr>
-            <th>Candidate</th>
-            <th>Status</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>LinkedIn</th>
-          </tr>
-        </thead>
+        <thead><tr><th>Name</th><th>Rating</th><th>Score</th><th>Email</th><th>Phone</th><th>LinkedIn</th><th>Invite</th></tr></thead>
         <tbody id="ctBody"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Templates -->
-  <div class="sdiv">
-    <div class="sdiv-l"></div>
-    <div class="sdiv-lbl">Invitation Templates</div>
-    <div class="sdiv-l"></div>
-  </div>
-  <div class="card">
-    <div class="sec-lbl" style="margin-bottom:9px;">Email Invitation</div>
-    <div class="msg-b" id="emailTpl">
-      <button class="cp-btn" onclick="copyEl('emailTpl')">Copy</button>
-    </div>
-  </div>
-  <div class="card" style="margin-top:11px;">
-    <div class="sec-lbl" style="margin-bottom:9px;">SMS / WhatsApp</div>
-    <div class="msg-b" id="smsTpl">
-      <button class="cp-btn" onclick="copyEl('smsTpl')">Copy</button>
-    </div>
-  </div>
-
   <div class="btn-row" style="margin-top:28px;">
-    <button class="btn btn-s" onclick="exportExcel()">↓&nbsp; Export Report (.xlsx)</button>
+    <button class="btn btn-s" onclick="exportExcel()">↓&nbsp; Export Full Report (.xlsx)</button>
     <button class="btn btn-o" onclick="resetApp()">←&nbsp; New Assessment</button>
   </div>
 </div>
-
 </main>
+
+<!-- INVITE MODAL -->
+<div class="modal-overlay" id="inviteModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Invitation Messages</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalCandidateName" style="font-size:12px;color:var(--slate);font-family:'JetBrains Mono',monospace;margin-bottom:12px;"></div>
+    <div class="modal-tabs">
+      <div class="mtab active" onclick="switchTab('sms',this)">SMS</div>
+      <div class="mtab" onclick="switchTab('wa',this)">WhatsApp</div>
+      <div class="mtab" onclick="switchTab('email',this)">Email</div>
+    </div>
+    <div class="msg-b" id="modalMsg"></div>
+    <button class="cp-btn" onclick="copyModalMsg()">📋 Copy Message</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════════════════════
-   MERIDIAN OFFLINE SCORING ENGINE
-   ---------------------------------------------------------------
-   Architecture: 100% browser-side. No API calls. No server.
-   PDF text extraction via PDF.js (CDN). Excel export via SheetJS.
-   Scoring is keyword/rule-based, not AI. Results will differ from
-   AI screening: accuracy depends on CV text quality and specificity
-   of requirements entered by the recruiter.
-   ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   MERIDIAN v2 — OFFLINE SCORING ENGINE
+   100% browser, no API, no backend.
+   PDF parsing: PDF.js | Excel export: SheetJS
+   ═══════════════════════════════════════════════════════════ */
 
-/* ─────────────────────────────────────────────────────────────────
-   1. PDF.JS SETUP
-   ───────────────────────────────────────────────────────────────── */
+// ─── PDF.js setup ───────────────────────────────────────────
 if (typeof pdfjsLib !== 'undefined') {
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 }
 
-/**
- * Extracts plain text from a PDF File object using PDF.js.
- * Falls back gracefully if PDF.js failed to load or the PDF is image-only.
- */
 async function extractTextFromPDF(file) {
-  if (typeof pdfjsLib === 'undefined') {
-    return `[PDF.js not loaded — cannot read ${file.name}. Please use TXT format.]`;
-  }
+  if (typeof pdfjsLib === 'undefined')
+    return `[PDF.js not loaded — use TXT format for ${file.name}]`;
   try {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let fullText = '';
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      // Join text items — preserve spacing between tokens
-      const pageText = textContent.items.map(item => item.str).join(' ');
-      fullText += pageText + '\n';
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const tc = await page.getTextContent();
+      text += tc.items.map(t => t.str).join(' ') + '\n';
     }
-    return fullText.trim() || `[No text found in ${file.name} — may be a scanned/image PDF.]`;
-  } catch (err) {
-    return `[PDF parse error for ${file.name}: ${err.message}]`;
+    return text.trim() || `[No readable text in ${file.name} — may be image/scanned PDF]`;
+  } catch (e) {
+    return `[PDF error: ${e.message} in ${file.name}]`;
   }
 }
 
-/**
- * Reads a File as text.
- * Dispatches to PDF.js for PDFs; uses FileReader for TXT.
- */
 async function readFile(f) {
   const ext = f.name.split('.').pop().toLowerCase();
   if (ext === 'pdf') return extractTextFromPDF(f);
   return new Promise(res => {
     const r = new FileReader();
-    r.onerror = () => res(`[Could not read: ${f.name}]`);
-    r.onload = e => res(e.target.result || '');
+    r.onerror = () => res(`[Cannot read ${f.name}]`);
+    r.onload  = e => res(e.target.result || '');
     r.readAsText(f);
   });
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   2. TEXT UTILITIES
-   ───────────────────────────────────────────────────────────────── */
-const STOP_WORDS = new Set([
-  'a','an','the','and','or','for','in','of','to','with','at','by','from',
-  'as','is','are','was','were','be','been','have','has','had','do','does',
-  'did','will','would','could','should','may','might','can','i','we','you',
-  'he','she','they','this','that','it','my','your','our','their','on','up',
-  'out','into','about','than','more','also','just','all','but','not','so',
-  'if','then','there','when','which','who','what','how','any','some','no',
-  'own','other','same','very','its','been','being','am','us','them','these',
-  'those','each','few','more','most','other','such','only','own','too',
-]);
-
-/** Returns a lowercase, punctuation-stripped version of the text. */
-function normalizeText(text) {
-  return String(text || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9\s+#.]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+// ─── Text utilities ──────────────────────────────────────────
+function norm(t) {
+  return String(t || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function has(text, phrase) {
+  return norm(text).includes(norm(phrase));
+}
+function countHits(text, phrases) {
+  return phrases.filter(p => has(text, p)).length;
 }
 
-/**
- * Checks whether a keyword phrase exists inside normalised CV text.
- * Handles single words and multi-word phrases.
- */
-function phraseInText(phrase, normCV) {
-  const p = normalizeText(phrase);
-  return p.length > 1 && normCV.includes(p);
-}
-
-/** Tokenises text into lowercase words, removing stop words. */
-function tokenize(text) {
-  return String(text || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9+#\s]/g, ' ')
-    .split(/\s+/)
-    .filter(w => w.length > 1 && !STOP_WORDS.has(w));
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   3. CONTACT INFO EXTRACTION
-   Regex-based extraction of email, phone, LinkedIn from raw CV text.
-   ───────────────────────────────────────────────────────────────── */
-function extractContactInfo(text) {
-  // Email
-  const emailMatch = text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
-  const email = emailMatch ? emailMatch[0].toLowerCase() : 'N/A';
-
-  // Phone — handles BD numbers (01X-XXXXXXXX), international, and formatted US/UK
-  const phoneMatch = text.match(
-    /(?:\+?88)?(?:01[3-9]\d{8})|(?:\+?[1-9]\d{7,13})|(?:\(\d{2,4}\)[\s.\-]?\d{3,4}[\s.\-]?\d{3,4})/
+// ─── Contact extraction ──────────────────────────────────────
+function extractContact(text) {
+  const email = (text.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/) || [])[0] || 'N/A';
+  const phone = (text.match(
+    /(?:\+?88)?(?:01[3-9]\d{8})|(?:\+?\d[\d\s\-().]{8,14}\d)/
+  ) || [])[0] || 'N/A';
+  const li = (text.match(/linkedin\.com\/in\/([\w\-%.]{3,60})/i) || [])[1];
+  const linkedin = li ? `linkedin.com/in/${li}` : 'N/A';
+  // Simple address: look for "road","area","dhaka","district","city" near a line
+  const addrMatch = text.match(
+    /[\w\s,#\-]+(?:road|rd|lane|ave|avenue|street|st|block|sector|area|dhaka|chittagong|sylhet|rajshahi|district|city|town|village|para|nagar|bari)[\w\s,#\-]*/i
   );
-  const phone = phoneMatch ? phoneMatch[0].replace(/\s/g, '') : 'N/A';
-
-  // LinkedIn URL or username
-  const liMatch = text.match(/linkedin\.com\/in\/([\w\-%.]{3,50})/i);
-  const linkedin = liMatch ? `https://linkedin.com/in/${liMatch[1]}` : 'N/A';
-
-  return { email, phone, linkedin };
+  const address = addrMatch ? addrMatch[0].trim().replace(/\s+/g,' ').slice(0,80) : 'N/A';
+  return { email, phone, linkedin, address };
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   4. CANDIDATE NAME EXTRACTION
-   Attempts to find a real name from the first few CV lines.
-   Falls back to cleaning the filename if no name pattern found.
-   ───────────────────────────────────────────────────────────────── */
-function extractCandidateName(text, fileName) {
+// ─── Name extraction ─────────────────────────────────────────
+function extractName(text, fileName) {
   const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1 && l.length < 60);
-  for (let i = 0; i < Math.min(8, lines.length); i++) {
-    const line = lines[i];
-    // Two to four capitalised words, no digits, no special chars
-    if (/^[A-Z][a-zA-Z]+([\s\-][A-Z][a-zA-Z]+){1,3}$/.test(line)) {
-      return line.trim();
-    }
+  for (let i = 0; i < Math.min(10, lines.length); i++) {
+    if (/^[A-Z][a-zA-Z]+([\s\-][A-Z][a-zA-Z]+){1,3}$/.test(lines[i])) return lines[i];
   }
-  // Fallback: convert filename to readable name
-  return fileName
-    .replace(/\.[^.]+$/, '')          // strip extension
-    .replace(/[-_]/g, ' ')            // hyphens/underscores → spaces
-    .replace(/\s+/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase()) // Title Case
-    .trim();
+  return fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase()).trim();
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   5. YEARS OF EXPERIENCE ESTIMATION
-   Two strategies: explicit statements, then date-range summing.
-   ───────────────────────────────────────────────────────────────── */
-function estimateYearsOfExperience(text) {
-  // Strategy A: explicit "X years of experience" statement
-  const explicit = text.match(
-    /(\d{1,2})\+?\s*years?\s*(?:of\s*)?(?:work|professional|relevant|industry|total)?\s*(?:experience|exp(?:erience)?)/i
-  );
-  if (explicit) return parseInt(explicit[1], 10);
-
-  // Strategy B: sum date ranges found in work history sections
-  const currentYear = new Date().getFullYear();
-  const rangeRx = /\b((?:19|20)\d{2})\b\s*[-–—to\/]+\s*(?:\b((?:19|20)\d{2})\b|(present|current|now|ongoing|till\s*date|to\s*date))/gi;
-  let totalYears = 0;
-  let match;
-  while ((match = rangeRx.exec(text)) !== null) {
-    const start = parseInt(match[1], 10);
-    const endRaw = match[2];
-    const end = endRaw ? parseInt(endRaw, 10) : currentYear;
-    if (start >= 1980 && start <= currentYear && end >= start && (end - start) <= 35) {
-      totalYears += (end - start);
-    }
+// ─── Years of experience ─────────────────────────────────────
+function estimateYears(text) {
+  const ex = text.match(/(\d{1,2})\+?\s*years?\s*(?:of\s*)?(?:work|professional|relevant|total)?\s*(?:experience|exp)/i);
+  if (ex) return +ex[1];
+  const yr = new Date().getFullYear();
+  const rx = /\b((?:19|20)\d{2})\s*[-–—to\/]+\s*(?:\b((?:19|20)\d{2})\b|(present|current|now|ongoing))/gi;
+  let tot = 0, m;
+  while ((m = rx.exec(text)) !== null) {
+    const s = +m[1], e = m[2] ? +m[2] : yr;
+    if (s >= 1990 && s <= yr && e >= s && e - s <= 30) tot += e - s;
   }
-  if (totalYears > 0) return Math.min(totalYears, 40);
-
-  return null; // Could not estimate
+  return tot > 0 ? Math.min(tot, 35) : null;
 }
 
-/** Maps numeric years to an experience-level key. */
-function yearsToLevel(years) {
-  if (years === null || years === undefined) return null;
-  if (years <= 2)  return 'entry';
-  if (years <= 5)  return 'mid';
-  if (years <= 10) return 'senior';
-  return 'lead'; // covers lead, executive, csuite
-}
+/* ═══════════════════════════════════════════════════════════
+   SCORING ENGINE v2
+   ───────────────────────────────────────────────────────────
+   6 dimensions (total 100):
+   1. Role Relevance            /25
+   2. Customer Support / Inbox  /20
+   3. Social Media / Moderation /20
+   4. Sales / Conversion        /15
+   5. Communication / Professionalism /10
+   6. Tools / Platforms         /10
+   ═══════════════════════════════════════════════════════════ */
 
-/* ─────────────────────────────────────────────────────────────────
-   6. REQUIREMENTS PARSER
-   Splits the free-text requirements field into individual skill phrases.
-   ───────────────────────────────────────────────────────────────── */
-function parseRequirements(reqs) {
-  if (!reqs || !reqs.trim()) return [];
-  return reqs
-    .split(/[,\n;•·\-\|\/]+/)
-    .map(r => r.trim().toLowerCase())
-    .filter(r => r.length > 2 && r.length < 80)
-    .map(r =>
-      r.replace(/^(?:must[\s-]?have|required|mandatory|preferred|essential|nice[\s-]?to[\s-]?have|bonus|key|core)\s*:?\s*/i, '').trim()
-    )
-    .filter(r => r.length > 2);
-}
+// ── Domain keyword dictionaries ──────────────────────────────
+const KW = {
+  // Role relevance — broad role title words
+  roleTitle: [
+    'moderator','moderation','inbox manager','inbox management','page manager',
+    'community manager','community management','facebook moderator','social media manager',
+    'customer support','customer service','customer care','support executive',
+    'support agent','client support','sales support','sales executive','telesales',
+    'digital marketing','social media','content manager','content creator',
+    'comment handler','response handler','order manager','escalation',
+  ],
 
-/* ─────────────────────────────────────────────────────────────────
-   7. SCORING ENGINE
-   ---------------------------------------------------------------
-   Score breakdown (total 100 points):
-     Role title keyword match  →  0–25 pts
-     Industry keyword match    →  0–15 pts
-     Skills / requirements     →  0–30 pts
-     Experience level match    →  0–20 pts
-     Contact completeness      →  0–10 pts
-   ---------------------------------------------------------------
-   Thresholds:
-     ≥ 60  → Recommended (Top Candidate)
-     < 60  → Not Recommended
-   ───────────────────────────────────────────────────────────────── */
+  // Customer / inbox / support
+  support: [
+    'customer support','customer service','customer care','inbox handling','inbox management',
+    'comment moderation','comment handling','reply to customer','respond to customer',
+    'live chat','chat support','query handling','complaint handling','complaint resolution',
+    'ticket handling','helpdesk','order confirmation','order tracking','order support',
+    'after sales','customer communication','client communication','escalation',
+    'refund handling','return handling','follow up','follow-up customer',
+    'cash on delivery','cod confirmation','delivery update','customer satisfaction',
+    'response time','first response','sla','service level','call center','call centre',
+    'bpo','inbound','outbound','customer retention','retention',
+  ],
+
+  // Social media / moderation
+  social: [
+    'facebook','facebook page','fb page','instagram','social media','social media page',
+    'page management','community management','community moderation','post moderation',
+    'comment moderation','content moderation','user moderation','spam removal',
+    'facebook group','group management','meta','meta business suite','business suite',
+    'ads manager','facebook ads','instagram ads','boosted post','organic reach',
+    'content calendar','content planning','content creation','graphic content',
+    'reel','story','post scheduling','buffer','hootsuite','later','sprout',
+    'engagement','reach','impression','analytics','insights','page insights',
+    'social listening','brand monitoring','crisis management','online reputation',
+    'tiktok','youtube','linkedin','twitter','x platform',
+  ],
+
+  // Sales / conversion / engagement
+  sales: [
+    'sales','lead generation','lead handling','lead conversion','conversion rate',
+    'target','quota','revenue','upsell','cross sell','product knowledge',
+    'deal closing','negotiation','follow up','pipeline','crm','sales funnel',
+    'order taking','order processing','product recommendation','selling',
+    'persuasion','retention','renewal','acquisition','outreach','prospect',
+    'cold calling','warm calling','demo','presentation','proposal',
+    'e-commerce sales','online sales','shop management','product listing',
+  ],
+
+  // Communication & professionalism
+  communication: [
+    'communication','professional communication','written communication','verbal communication',
+    'email writing','email correspondence','report writing','documentation','ms word',
+    'presentation','powerpoint','professional english','bangla typing','bilingual',
+    'interpersonal','teamwork','team player','collaboration','time management',
+    'organization','organised','multitasking','attention to detail','analytical',
+    'problem solving','critical thinking','adaptable','fast learner','quick learner',
+    'target oriented','result driven','deadline','punctual',
+  ],
+
+  // Tools & platforms
+  tools: [
+    'canva','adobe','photoshop','illustrator','capcut','video editing',
+    'microsoft office','excel','word','powerpoint','google sheets','google docs',
+    'google workspace','notion','trello','asana','slack','whatsapp business',
+    'sms gateway','shopify','woocommerce','daraz','chaldal','pathao','shohoz',
+    'facebook business suite','meta business suite','ads manager','pixel',
+    'crm','hubspot','zoho','freshdesk','zendesk','intercom','chatbot',
+    'data entry','spreadsheet','google analytics','buffer','mailchimp',
+  ],
+
+  // Weak/mismatch signals — these indicate low relevance
+  mismatch: [
+    'civil engineer','mechanical engineer','electrical engineer','chemical engineer',
+    'mbbs','doctor','nurse','medical','pharmacy','pharmaceutical',
+    'teacher','lecturer','professor','educator','academic','curriculum',
+    'accountant','audit','taxation','chartered accountant','cpa',
+    'software engineer','programmer','developer','coding','backend','frontend',
+    'construction','architecture','architect','structural',
+    'agriculture','farming','crop','veterinary',
+    'garments','textile','stitching','sewing machine','factory operator',
+    'driver','logistics','supply chain','warehouse','warehouse operator',
+    'lawyer','legal','barrister','attorney','advocate',
+  ],
+};
+
+// ── Score one candidate ──────────────────────────────────────
 function scoreCandidate(jobData, cvText, fileName) {
-  const normCV = normalizeText(cvText);
-  const cvLen  = normCV.replace(/\s/g, '').length;
+  const t     = cvText; // raw (for contact extraction)
+  const n     = norm(cvText);
+  const isBD  = jobData.countryCode === 'BD';
 
-  // Guard: flag suspiciously short CVs (likely parse failure)
-  const parseWarning = cvLen < 80
-    ? '⚠ CV text too short — may be a scanned or image-only PDF. Score may be inaccurate.'
-    : null;
+  // Guard: short text = likely scanned PDF
+  const parseWarning = n.replace(/\s/g,'').length < 100
+    ? 'CV text too short — may be scanned/image PDF. Score may be inaccurate.' : null;
 
-  // ── A. Role title keyword match (0–25) ──────────────────────────
-  const roleTokens    = tokenize(jobData.role).filter(t => t.length > 2);
-  const roleMatched   = roleTokens.filter(t => normCV.includes(t));
-  const roleScore     = roleTokens.length > 0
-    ? Math.round((roleMatched.length / roleTokens.length) * 25)
-    : 0;
+  // ── Parse requirements from job data ──
+  const reqPhrases = (jobData.reqs || '').split(/[,\n;•·\-\/]+/)
+    .map(r => r.trim().toLowerCase()).filter(r => r.length > 2);
 
-  // ── B. Industry keyword match (0–15) ────────────────────────────
-  const industryTokens  = tokenize(jobData.industry).filter(t => t.length > 2);
-  const industryMatched = industryTokens.filter(t => normCV.includes(t));
-  const industryScore   = industryTokens.length > 0
-    ? Math.round((industryMatched.length / industryTokens.length) * 15)
-    : 8; // No industry specified → neutral mid-score
+  // ── 1. Role Relevance /25 ──────────────────────────────────
+  const roleTitleHits  = countHits(n, [jobData.role.toLowerCase(), ...KW.roleTitle]);
+  const industryHits   = countHits(n, [jobData.industry.toLowerCase()]);
+  const reqHits        = reqPhrases.length > 0 ? countHits(n, reqPhrases) : 0;
+  const reqMax         = reqPhrases.length > 0 ? reqPhrases.length : 1;
+  const reqRatio       = reqHits / reqMax;
 
-  // ── C. Skills / requirements match (0–30) ───────────────────────
-  const reqPhrases   = parseRequirements(jobData.reqs);
-  const matchedSkills = [];
-  const missedSkills  = [];
-  if (reqPhrases.length > 0) {
-    reqPhrases.forEach(phrase => {
-      (phraseInText(phrase, normCV) ? matchedSkills : missedSkills).push(phrase);
-    });
-  }
-  const skillsScore = reqPhrases.length > 0
-    ? Math.round((matchedSkills.length / reqPhrases.length) * 30)
-    : 15; // No requirements → neutral mid-score
+  // Mismatch penalty: if most experience is in unrelated field
+  const mismatchHits   = countHits(n, KW.mismatch);
+  const mismatchPenalty= mismatchHits >= 3 ? 10 : mismatchHits >= 2 ? 6 : mismatchHits >= 1 ? 3 : 0;
 
-  // ── D. Experience level match (0–20) ────────────────────────────
-  const estimatedYears = estimateYearsOfExperience(cvText);
-  const estimatedLevel = yearsToLevel(estimatedYears);
-  const targetLevel    = jobData.expLevel;
-  let expScore = 0;
-  if (targetLevel === 'any' || estimatedLevel === null) {
-    expScore = 12; // Unknown → neutral
-  } else {
-    const lvls = ['entry', 'mid', 'senior', 'lead'];
-    // normalise executive/csuite → 'lead' for comparison
-    const tNorm = ['executive', 'csuite'].includes(targetLevel) ? 'lead' : targetLevel;
-    const tIdx  = lvls.indexOf(tNorm);
-    const eIdx  = lvls.indexOf(estimatedLevel);
-    const diff  = Math.abs(tIdx - eIdx);
-    expScore = diff === 0 ? 20 : diff === 1 ? 12 : diff === 2 ? 6 : 3;
-  }
+  let roleScore = Math.round(
+    (Math.min(roleTitleHits, 6) / 6) * 14 +   // role title keywords
+    Math.min(industryHits * 2, 4) +             // industry match
+    reqRatio * 7                                 // requirements match
+  ) - mismatchPenalty;
+  roleScore = Math.max(0, Math.min(25, roleScore));
 
-  // ── E. Contact completeness (0–10) ──────────────────────────────
-  const contact = extractContactInfo(cvText);
-  const contactScore =
-    (contact.email    !== 'N/A' ? 4 : 0) +
-    (contact.phone    !== 'N/A' ? 3 : 0) +
-    (contact.linkedin !== 'N/A' ? 3 : 0);
+  // ── 2. Customer Support / Inbox /20 ──────────────────────
+  const supportHits = countHits(n, KW.support);
+  let supportScore  = Math.round(Math.min(supportHits / 8, 1) * 20);
+  supportScore      = Math.max(0, Math.min(20, supportScore));
 
-  // ── Final score ──────────────────────────────────────────────────
-  const total = Math.min(100, roleScore + industryScore + skillsScore + expScore + contactScore);
-  const isTop = total >= 60;
+  // ── 3. Social Media / Moderation /20 ─────────────────────
+  const socialHits  = countHits(n, KW.social);
+  let socialScore   = Math.round(Math.min(socialHits / 8, 1) * 20);
+  socialScore       = Math.max(0, Math.min(20, socialScore));
 
-  // ── Key skills (display tags) ───────────────────────────────────
-  const keySkills = [
-    ...roleMatched.slice(0, 2).map(s => toTitle(s)),
-    ...matchedSkills.slice(0, 4).map(s => toTitle(s)),
-  ].filter((v, i, a) => a.indexOf(v) === i).slice(0, 6); // unique, max 6
+  // ── 4. Sales / Conversion /15 ────────────────────────────
+  const salesHits   = countHits(n, KW.sales);
+  let salesScore    = Math.round(Math.min(salesHits / 6, 1) * 15);
+  salesScore        = Math.max(0, Math.min(15, salesScore));
 
-  // ── Strengths ───────────────────────────────────────────────────
+  // ── 5. Communication / Professionalism /10 ───────────────
+  const commHits    = countHits(n, KW.communication);
+  const contact     = extractContact(cvText);
+  const contactBonus= (contact.email !== 'N/A' ? 2 : 0) + (contact.phone !== 'N/A' ? 1 : 0);
+  let commScore     = Math.round(Math.min(commHits / 5, 1) * 7) + contactBonus;
+  commScore         = Math.max(0, Math.min(10, commScore));
+
+  // ── 6. Tools / Platforms /10 ─────────────────────────────
+  const toolHits    = countHits(n, KW.tools);
+  let toolScore     = Math.round(Math.min(toolHits / 5, 1) * 10);
+  toolScore         = Math.max(0, Math.min(10, toolScore));
+
+  const total = Math.min(100,
+    roleScore + supportScore + socialScore + salesScore + commScore + toolScore
+  );
+
+  // ── Rating label ──────────────────────────────────────────
+  const rating = getRating(total);
+
+  // ── Strengths (plain language) ────────────────────────────
   const strengths = [];
-  if (roleScore >= 18) strengths.push('Strong role title alignment');
-  if (industryScore >= 11) strengths.push('Relevant industry background');
-  if (skillsScore >= 22) strengths.push('Meets majority of skill requirements');
-  if (expScore >= 16) strengths.push('Experience level matches target');
-  if (contact.email !== 'N/A') strengths.push('Contact details provided');
+  if (has(n,'facebook') || has(n,'meta') || has(n,'page management')) strengths.push('Has Facebook/Meta page management experience');
+  if (has(n,'inbox') || has(n,'inbox handling') || has(n,'inbox management')) strengths.push('Has inbox handling/management experience');
+  if (has(n,'comment') || has(n,'comment moderation')) strengths.push('Has comment moderation experience');
+  if (has(n,'customer support') || has(n,'customer service') || has(n,'customer care')) strengths.push('Has customer support/service experience');
+  if (has(n,'canva') || has(n,'graphic') || has(n,'design')) strengths.push('Has Canva / graphic content creation experience');
+  if (has(n,'content') || has(n,'content calendar') || has(n,'content creation')) strengths.push('Has content creation / calendar management experience');
+  if (has(n,'sales') || has(n,'lead') || has(n,'conversion')) strengths.push('Has sales / lead handling / conversion experience');
+  if (has(n,'call center') || has(n,'bpo') || has(n,'inbound') || has(n,'outbound')) strengths.push('Has call center / BPO experience');
+  if (has(n,'digital marketing') || has(n,'seo') || has(n,'paid ads') || has(n,'facebook ads')) strengths.push('Has digital marketing / paid ads experience');
+  if (has(n,'order') || has(n,'cod') || has(n,'cash on delivery') || has(n,'delivery')) strengths.push('Has e-commerce order / COD handling exposure');
+  if (has(n,'crm') || has(n,'hubspot') || has(n,'zoho') || has(n,'freshdesk')) strengths.push('Has CRM platform exposure');
+  if (contact.email !== 'N/A' && contact.phone !== 'N/A') strengths.push('Complete contact profile — easy to reach');
   if (contact.linkedin !== 'N/A') strengths.push('LinkedIn profile available');
-  if (strengths.length === 0) strengths.push('CV submitted and processed');
+  if (socialScore >= 12) strengths.push('Strong social media / moderation background');
+  if (supportScore >= 12) strengths.push('Strong customer communication track record');
 
-  // ── Gaps (areas to probe) ───────────────────────────────────────
-  const gaps = missedSkills.slice(0, 4).map(s => `Missing: ${toTitle(s)}`);
-  if (parseWarning) gaps.unshift(parseWarning);
+  // ── Weaknesses ────────────────────────────────────────────
+  const weaknesses = [];
+  if (socialScore < 6)  weaknesses.push('No social media / Facebook moderation evidence found');
+  if (supportScore < 6) weaknesses.push('Limited inbox / customer support proof in CV');
+  if (salesScore < 4)   weaknesses.push('No direct sales or lead handling evidence');
+  if (toolScore < 3)    weaknesses.push('No relevant tools (Canva, Meta Suite, CRM) mentioned');
+  if (mismatchHits >= 2) weaknesses.push('Most experience appears to be in an unrelated field');
+  if (commScore < 5)    weaknesses.push('Communication / professionalism signals are weak');
+  if (reqPhrases.length > 0 && reqHits === 0) weaknesses.push('None of the required skills were detected in the CV');
+  else if (reqPhrases.length > 0 && reqHits < reqPhrases.length / 2)
+    weaknesses.push(`Only ${reqHits}/${reqPhrases.length} required skills detected`);
+  const estYears = estimateYears(cvText);
+  if (estYears !== null && estYears < 1 && jobData.expLevel !== 'entry' && jobData.expLevel !== 'any')
+    weaknesses.push('Too junior — experience level does not match role requirements');
+  if (contact.email === 'N/A' && contact.phone === 'N/A') weaknesses.push('No contact details found in CV');
+  if (n.replace(/\s/g,'').length < 200) weaknesses.push('CV content is very thin — may be incomplete or image-based');
 
-  // ── Recommendation / rejection summaries ────────────────────────
-  const skillLine = reqPhrases.length > 0
-    ? `Matched ${matchedSkills.length}/${reqPhrases.length} required skills.`
-    : 'No specific requirements provided for comparison.';
-  const expLine = estimatedYears !== null
-    ? `Estimated experience: ~${estimatedYears} years.`
-    : 'Years of experience could not be determined from CV text.';
+  // Limit to 3–6 items each
+  const finalStrengths  = strengths.slice(0, 6);
+  const finalWeaknesses = weaknesses.slice(0, 6);
 
-  const whyHire     = `${skillLine} ${expLine} Rule-based score: ${total}/100.`;
-  const whyRejected = `${skillLine} ${expLine} Score ${total}/100 fell below the recommended threshold of 60.`;
+  // ── Recommendation reason ─────────────────────────────────
+  const isRecommended = total >= 50;
+  const whyHire = isRecommended
+    ? buildWhyHire(total, roleScore, supportScore, socialScore, salesScore, toolScore, estYears)
+    : '';
+  const whyRejected = !isRecommended
+    ? buildWhyRejected(total, finalWeaknesses, mismatchHits)
+    : '';
+
+  // ── Missing requirements ──────────────────────────────────
+  const missingReqs = reqPhrases.filter(p => !has(n, p)).slice(0, 5);
 
   return {
-    name        : extractCandidateName(cvText, fileName),
+    name        : extractName(cvText, fileName),
     fileName,
     matchScore  : total,
-    experience  : estimatedYears !== null ? `~${estimatedYears} yrs` : 'Unknown',
-    keySkills   : keySkills.length > 0 ? keySkills : ['See CV'],
-    strengths,
-    gaps,
+    rating,
+    experience  : estYears !== null ? `~${estYears} yr${estYears !== 1 ? 's' : ''}` : 'N/A',
+    keySkills   : getMatchedSkills(n, reqPhrases).slice(0, 6),
+    strengths   : finalStrengths,
+    weaknesses  : finalWeaknesses,
     whyHire,
     whyRejected,
-    isTop,
+    isRecommended,
+    missingReqs,
+    parseWarning,
+    breakdown   : { roleScore, supportScore, socialScore, salesScore, commScore, toolScore },
     ...contact,
-    // Sub-scores stored for Excel export transparency
-    _breakdown  : { roleScore, industryScore, skillsScore, expScore, contactScore },
   };
 }
 
-/** Title-cases a string (helper). */
+function getRating(score) {
+  if (score >= 78) return 'Excellent Fit';
+  if (score >= 62) return 'Strong Fit';
+  if (score >= 50) return 'Moderate Fit';
+  if (score >= 35) return 'Weak Fit';
+  return 'Not Recommended';
+}
+
+function getRatingClass(rating) {
+  if (rating === 'Excellent Fit')    return 'excellent';
+  if (rating === 'Strong Fit')       return 'strong';
+  if (rating === 'Moderate Fit')     return 'moderate';
+  if (rating === 'Weak Fit')         return 'weak';
+  return 'no';
+}
+
+function getRatingBadgeClass(rating) {
+  const m = {'Excellent Fit':'rb-excellent','Strong Fit':'rb-strong','Moderate Fit':'rb-moderate','Weak Fit':'rb-weak','Not Recommended':'rb-no'};
+  return m[rating] || 'rb-no';
+}
+
+function buildWhyHire(total, r, sup, soc, sal, tool, yrs) {
+  const parts = [];
+  if (soc >= 12) parts.push('strong social media and moderation background');
+  if (sup >= 12) parts.push('solid customer support / inbox handling track record');
+  if (sal >= 10) parts.push('sales and conversion experience');
+  if (tool >= 7) parts.push('familiarity with relevant tools and platforms');
+  if (r >= 18)   parts.push('high role alignment');
+  const base = parts.length > 0 ? `Recommended based on ${parts.join(', ')}.` : 'Meets minimum role requirements.';
+  const yrsStr = yrs !== null ? ` Estimated experience: ~${yrs} year(s).` : '';
+  return `${base}${yrsStr} Score: ${total}/100.`;
+}
+
+function buildWhyRejected(total, weaknesses, mismatch) {
+  if (mismatch >= 2) return `Profile appears to be from an unrelated professional field. ${weaknesses[0] || 'Insufficient relevant experience.'} Score: ${total}/100.`;
+  if (weaknesses.length > 0) return `${weaknesses[0]}. ${weaknesses[1] || ''} Score: ${total}/100 — below the 50-point recommendation threshold.`;
+  return `Overall score of ${total}/100 fell below the minimum threshold. Insufficient evidence of role-relevant experience.`;
+}
+
+function getMatchedSkills(normCV, reqPhrases) {
+  const matched = reqPhrases.filter(p => has(normCV, p)).map(p => toTitle(p));
+  const extras  = KW.social.concat(KW.support).filter(k => has(normCV, k)).map(k => toTitle(k));
+  return [...new Set([...matched, ...extras])];
+}
+
 function toTitle(s) {
   return String(s || '').replace(/\b\w/g, c => c.toUpperCase());
 }
 
-/* ─────────────────────────────────────────────────────────────────
-   8. INTERVIEW QUESTION BANK
-   12–15 questions generated from pre-built templates + role-matching.
-   ───────────────────────────────────────────────────────────────── */
-const Q_BANK = {
-  Technical: [
-    { q: 'Describe the most technically complex project you have worked on and the approach you took to deliver it.',
-      a: 'Look for structured problem-solving, relevant tools/technologies, measurable outcome, and clear ownership.' },
-    { q: 'What tools, platforms, or methodologies do you use most frequently, and why do you prefer them?',
-      a: 'Depth of knowledge matters more than breadth. Alignment with role requirements is key.' },
-    { q: 'How do you ensure accuracy and quality in your deliverables before they leave your hands?',
-      a: 'Systematic review process, checklists, peer review, or automated validation practices.' },
-    { q: 'How do you stay current with developments and best practices in your field?',
-      a: 'Expect active learning: courses, certifications, publications, communities, or industry events.' },
-    { q: 'Walk me through how you approach a complex task from initial briefing to final delivery.',
-      a: 'Look for structured planning, stakeholder management, milestone-setting, and results focus.' },
-    { q: 'Have you ever had to learn a new skill or tool under time pressure? How did you approach it?',
-      a: 'Learning agility, resourcefulness, composure under pressure, and the actual outcome.' },
-  ],
-  Behavioural: [
-    { q: 'Tell me about a time you managed competing priorities under pressure. How did you decide what to focus on first?',
-      a: 'STAR-format response. Prioritisation framework, stakeholder communication, measurable outcome.' },
-    { q: 'Describe a situation where you proactively identified a problem before it escalated. What did you do?',
-      a: 'Evaluates initiative, analytical thinking, risk awareness, and ownership mentality.' },
-    { q: 'Give an example of when you had to work with a difficult colleague or stakeholder. How did you handle it?',
-      a: 'Emotional intelligence, professional conflict resolution, communication skills, positive outcome.' },
-    { q: 'Tell me about a significant professional failure. What happened, and what did you change as a result?',
-      a: 'Self-awareness, accountability, resilience, and evidence that lessons were actually applied.' },
-    { q: 'Describe a time you went above and beyond your formal responsibilities. What motivated you to do so?',
-      a: 'Ownership mindset, intrinsic motivation, alignment with organisational values.' },
-    { q: 'Tell me about a time you had to adapt quickly to a major change. How did you manage the transition?',
-      a: 'Adaptability, positive framing, practical steps taken, and documented outcome.' },
-  ],
-  Situational: [
-    { q: 'If you joined this role tomorrow with minimal handover, how would you approach your first 30 days?',
-      a: 'Structured plan: stakeholder mapping, listen-first approach, quick-win identification, clear milestones.' },
-    { q: 'How would you handle a situation where you strongly disagreed with a senior decision you were expected to implement?',
-      a: 'Constructive disagreement, professional escalation path, execution after decision, no passive resistance.' },
-    { q: 'If you discovered a significant error in a deliverable that had already been shared externally, what would you do?',
-      a: 'Immediate ownership, transparent communication, corrective action plan, prevention measures.' },
-    { q: 'How would you prioritise if you had three equally urgent tasks due at the same time?',
-      a: 'Prioritisation method, stakeholder communication, delegation where appropriate, realistic expectations.' },
-    { q: 'If a key team member resigned suddenly before a critical deadline, what steps would you take?',
-      a: 'Resourcefulness, calm under pressure, clear communication, delegation, and delivery focus.' },
-  ],
-  'Culture Fit': [
-    { q: 'What kind of work environment and management style brings out your best performance?',
-      a: 'Self-awareness. Should broadly align with your culture. Watch for excessive answers that just mirror the job ad.' },
-    { q: 'How do you approach receiving critical feedback on your work?',
-      a: 'Open mindset, specific examples of acting on feedback, professional maturity, no defensiveness.' },
-    { q: 'What does professional development mean to you, and how do you actively invest in it?',
-      a: 'Continuous improvement mindset, clear goals, evidence of self-directed learning initiatives.' },
-    { q: 'How would your most recent manager describe your working style in a few words?',
-      a: 'Self-awareness, consistency between self-image and others\' perception. Positive professional traits.' },
-    { q: 'What specifically about this role and our organisation attracted you to apply?',
-      a: 'Genuine interest in this role — not generic. Specific reasons should align with what the role actually offers.' },
-  ],
-};
-
-/** Role-domain specific questions keyed by keyword. */
-const ROLE_Q = {
-  manager   : { q: 'How do you build and sustain high performance in a team, especially when morale is low?', a: 'Leadership style, recognition practices, performance management process, empathy and accountability balance.' },
-  director  : { q: 'How do you align your team\'s objectives with the broader organisational strategy?', a: 'Strategic thinking, OKR/KPI frameworks, cross-functional collaboration, executive communication.' },
-  lead      : { q: 'How do you balance your own technical contributions with your leadership responsibilities?', a: 'Time allocation, delegation mindset, mentoring approach, IC vs. management tension.' },
-  analyst   : { q: 'Walk me through how you convert raw data into a business recommendation. What is your process?', a: 'Data literacy, analytical method, visualisation choices, and bridging insight to action.' },
-  sales     : { q: 'Describe your full sales cycle from initial prospecting to close, including how you handle common objections.', a: 'Pipeline management, discovery skills, persuasion method, resilience, quota track record.' },
-  marketing : { q: 'Describe a campaign you ran end-to-end — from brief to performance measurement. What would you change?', a: 'Full-funnel thinking, metrics focus, creative judgment, and learning from results.' },
-  developer : { q: 'How do you approach writing code that others will need to maintain long after you have moved on?', a: 'Code quality standards, documentation habits, testing culture, readability over cleverness.' },
-  engineer  : { q: 'Describe your approach to diagnosing and resolving a critical production issue under time pressure.', a: 'Systematic debugging, clear incident communication, root cause analysis, and prevention steps.' },
-  finance   : { q: 'How do you maintain financial accuracy when working under tight reporting deadlines?', a: 'Reconciliation practices, error-checking routines, escalation protocols when anomalies are found.' },
-  accounting: { q: 'Walk me through your month-end close process and the controls you rely on to ensure accuracy.',a: 'Process knowledge, accuracy controls, timeline discipline, and clear review checkpoints.' },
-  hr        : { q: 'How do you maintain a fair and consistent hiring process while still moving quickly on strong candidates?', a: 'Structured interviewing, bias-mitigation techniques, speed-vs-quality trade-offs.' },
-  recruitment:{ q: 'What sourcing strategies do you find most effective for difficult-to-fill roles, and why?', a: 'Creative sourcing, employer branding, pipeline building, measured conversion metrics.' },
-  operations: { q: 'Describe a process you identified as inefficient and the concrete steps you took to improve it.', a: 'Process mapping, stakeholder buy-in, implementation approach, and measured improvement outcome.' },
-  customer  : { q: 'Tell me about the most difficult customer interaction you have managed and how you resolved it.', a: 'Empathy, professional de-escalation, resolution speed, and customer satisfaction outcome.' },
-  design    : { q: 'Walk me through your design process from brief to final delivery, and how you incorporate stakeholder feedback.', a: 'User-centred approach, iteration discipline, design rationale, handling conflicting feedback.' },
-  research  : { q: 'Describe your approach to designing a study and ensuring findings are actionable for the business.', a: 'Research methodology, sample design, bias awareness, insight-to-recommendation bridge.' },
-  teacher   : { q: 'How do you adapt your teaching approach to accommodate different learning styles within one classroom?', a: 'Differentiation strategies, formative assessment, inclusive and adaptive teaching practices.' },
-  logistics : { q: 'Describe how you have managed supply chain disruptions and what contingency planning you put in place.', a: 'Risk awareness, supplier relationship management, contingency protocols, communication under pressure.' },
-};
-
-/** Country-specific compliance questions. */
-const COUNTRY_Q = {
-  BD : { q: 'Are you familiar with the Bangladesh Labour Act 2006 and its key provisions around employment contracts, working hours, and termination?', a: 'Awareness of major provisions. HR candidates must show deep knowledge; others at least basic awareness.' },
-  US : { q: 'Are you familiar with key US Federal employment laws including the FLSA, ADA, and Title VII protections?', a: 'Baseline awareness expected; deep knowledge required for HR/legal roles.' },
-  GB : { q: 'Are you aware of your rights and responsibilities under UK employment law, including the Employment Rights Act 1996 and GDPR obligations?', a: 'Relevant legal awareness; depth matters for senior or people-management roles.' },
-  AE : { q: 'Are you familiar with the UAE Labour Law (Federal Decree-Law No. 33 of 2021) and provisions on contracts, gratuity, and visa-linked employment?', a: 'Key for any UAE-based role. Understanding of limited vs. unlimited contract structures.' },
-  SA : { q: 'Are you familiar with Saudi Labour Law and the Nitaqat (Saudisation) framework, and how it may apply to this role?', a: 'Nitaqat category awareness, worker protection provisions, and working-hour regulations.' },
-  IN : { q: 'Are you aware of India\'s consolidated Labour Codes framework and how it affects employment terms, provident fund, and gratuity?', a: 'Understanding of the four Labour Codes, PF obligations, and recent amendments.' },
-  MY : { q: 'Are you familiar with the Malaysian Employment Act 1955 and its recent 2023 amendments affecting working hours and flexible work?', a: 'Awareness of key protections and the new flexible working arrangement provisions.' },
-  SG : { q: 'Are you aware of Singapore\'s Employment Act, MOM regulations, and CPF obligations relevant to this role?', a: 'Understanding of statutory obligations, especially CPF contributions and leave entitlements.' },
-  AU : { q: 'Are you familiar with the Fair Work Act 2009 and your obligations under the National Employment Standards?', a: 'NES awareness, Modern Award relevance, and unfair dismissal framework.' },
-  DEFAULT: { q: 'Are you legally authorised to work in this country and location, and are you aware of your principal statutory employment rights?', a: 'Right-to-work confirmation. Basic awareness of local employment law.' },
-};
-
-/**
- * Generates 12–15 structured interview questions based on the job data.
- * Combines generic category questions with role-specific and country-specific ones.
- */
-function generateInterviewQuestions(jobData) {
-  const questions  = [];
-  let   num        = 1;
-  const seen       = new Set();
-
-  const add = (category, q, a) => {
-    if (!seen.has(q)) {
-      seen.add(q);
-      questions.push({ number: num++, category, question: q, whatToAssess: a, idealAnswerParameters: a });
-    }
-  };
-
-  // Core categories — fixed selections
-  const T  = Q_BANK.Technical;
-  const B  = Q_BANK.Behavioural;
-  const S  = Q_BANK.Situational;
-  const CF = Q_BANK['Culture Fit'];
-
-  add('Technical',     T[0].q, T[0].a);
-  add('Technical',     T[1].q, T[1].a);
-  add('Technical',     T[4].q, T[4].a);
-  add('Behavioural',   B[0].q, B[0].a);
-  add('Behavioural',   B[1].q, B[1].a);
-  add('Behavioural',   B[2].q, B[2].a);
-  add('Situational',   S[0].q, S[0].a);
-  add('Situational',   S[2].q, S[2].a);
-  add('Culture Fit',   CF[0].q, CF[0].a);
-  add('Culture Fit',   CF[1].q, CF[1].a);
-
-  // Role-Specific — match keywords in job title + industry
-  const roleNorm = normalizeText(jobData.role + ' ' + jobData.industry);
-  let   rsAdded  = 0;
-  for (const [kw, qObj] of Object.entries(ROLE_Q)) {
-    if (roleNorm.includes(kw) && rsAdded < 2) {
-      add('Role-Specific', qObj.q, qObj.a);
-      rsAdded++;
-    }
-  }
-  // Fallback role-specific if no domain keywords matched
-  if (rsAdded === 0) {
-    add('Role-Specific',
-      `What do you consider the single most important competency for a ${jobData.role}, and how do you demonstrate it in your current work?`,
-      `Should align with the core demands of the role. Look for self-awareness and concrete, recent examples.`
-    );
-    add('Role-Specific',
-      `What distinguishes a high-performing ${jobData.role} from an average one, in your experience?`,
-      `Insight into the role, aspirations to excellence, and realistic self-benchmarking.`
-    );
-  }
-
-  // Country-Specific / Legal Compliance
-  const countryQ = COUNTRY_Q[jobData.countryCode] || COUNTRY_Q.DEFAULT;
-  add('Legal Compliance',
-    countryQ.q.replace('[Country]', jobData.country),
-    countryQ.a
-  );
-
-  // Pad to 12 if still short
-  let padIdx = 0;
-  const padSources = [...B, ...S, ...CF];
-  while (questions.length < 12 && padIdx < padSources.length) {
-    const item = padSources[padIdx++];
-    const cat  = B.includes(item) ? 'Behavioural' : S.includes(item) ? 'Situational' : 'Culture Fit';
-    add(cat, item.q, item.a);
-  }
-
-  return questions;
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   9. TEMPLATE GENERATORS
-   ───────────────────────────────────────────────────────────────── */
-const EXP_LABELS = {
-  any       : 'professionals at any career stage',
-  entry     : 'junior professionals (0–2 years\' experience)',
-  mid       : 'mid-level professionals (3–5 years\' experience)',
-  senior    : 'senior professionals (6–10 years\' experience)',
-  lead      : 'lead or principal-level professionals (10+ years\' experience)',
-  executive : 'executive or director-level professionals',
-  csuite    : 'C-suite leaders',
-};
-
-/** Generates a structured job brief from template — no AI required. */
-function generateJobBrief(jobData) {
-  const { industry, role, expLevel, numPos, country, reqs } = jobData;
-  const expLabel   = EXP_LABELS[expLevel] || 'qualified professionals';
-  const countryStr = country !== 'Not specified' ? ` based in ${country}` : '';
-  const reqStr     = reqs && reqs.trim()
-    ? ` Key requirements include: ${reqs.trim().replace(/\n/g, ', ')}.`
-    : ` Candidates should demonstrate strong domain knowledge, a proven track record of results, and excellent professional communication.`;
-
-  return `We are seeking a talented ${role} to join our ${industry} team${countryStr}. This position is open to ${expLabel}, and we currently have ${numPos} opening(s) available. The successful candidate will bring demonstrable expertise in ${industry.toLowerCase()} and display the professional competencies expected at this seniority level.${reqStr} Beyond technical qualification, we are looking for someone who demonstrates initiative, communicates clearly, and aligns with our organisational values.`;
-}
-
-/** Email invitation template with role-specific subject line. */
-function generateEmailTemplate(jobData) {
-  const { role } = jobData;
-  return `Subject: Interview Invitation — ${role}
-
-Dear [Candidate Name],
-
-I hope this message finds you well. On behalf of [Organisation Name], I am pleased to inform you that following a review of your application, you have been shortlisted for an interview for the position of ${role}.
-
-Interview Details:
-  Date    : [Date]
-  Time    : [Time]
-  Format  : [In-Person / Video Conference / Phone]
-  Venue   : [Address or Meeting Link]
-
-Please confirm your availability by replying to this email or contacting [Recruiter Name] at [Phone Number] no later than [RSVP Date].
-
-If you have any questions about the role or the process, please do not hesitate to reach out. We are happy to assist.
-
-We look forward to speaking with you.
-
-Yours sincerely,
-[Recruiter Name]
-[Job Title] | [Organisation Name]
-[Email Address] | [Phone Number]`;
-}
-
-/** Short SMS/WhatsApp template. */
-function generateSMSTemplate(jobData) {
-  const { role } = jobData;
-  return `Dear [Name], congratulations! On behalf of [Company], we are pleased to inform you that you have been shortlisted for the ${role} position. Please reply to this message or call [Phone] to confirm your interview slot at your earliest convenience. We look forward to speaking with you.`;
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   10. MAIN ORCHESTRATOR
-   Combines scoring, ranking, and template generation into one call.
-   Returns a result object matching the renderResults() expected shape.
-   ───────────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   MAIN ORCHESTRATOR
+   ═══════════════════════════════════════════════════════════ */
 function analyzeCandidatesLocally(jobData, cvs) {
-  // Score every candidate
   const scored = cvs.map(cv => scoreCandidate(jobData, cv.content, cv.name));
-
-  // Sort best-first
   scored.sort((a, b) => b.matchScore - a.matchScore);
 
-  // Split into top (≥60) and rejected (<60)
-  const topRaw = scored.filter(c => c.matchScore >= 60);
-  const rejRaw = scored.filter(c => c.matchScore <  60);
+  const top = scored.filter(c => c.isRecommended);
+  const rej = scored.filter(c => !c.isRecommended);
 
-  const topCandidates = topRaw.map((c, i) => ({
-    rank        : i + 1,
-    name        : c.name,
-    fileName    : c.fileName,
-    matchScore  : c.matchScore,
-    experience  : c.experience,
-    keySkills   : c.keySkills,
-    strengths   : c.strengths,
-    gaps        : c.gaps,
-    whyHire     : c.whyHire,
-    email       : c.email,
-    phone       : c.phone,
-    linkedin    : c.linkedin,
-  }));
-
-  const rejectedCandidates = rejRaw.map(c => ({
-    name                : c.name,
-    fileName            : c.fileName,
-    matchScore          : c.matchScore,
-    whyRejected         : c.whyRejected,
-    missingRequirements : c.gaps.map(g => g.replace(/^Missing:\s*/i, '')).filter(Boolean).slice(0, 4),
-    email               : c.email,
-    phone               : c.phone,
-    linkedin            : c.linkedin,
-  }));
-
-  const countryCtxMsg = jobData.country !== 'Not specified'
-    ? `Scoring calibrated for ${jobData.country}: interview framework includes local compliance and professional-standards questions.`
-    : 'No country specified — generic interview framework applied.';
+  // Assign ranks to top candidates
+  top.forEach((c, i) => { c.rank = i + 1; });
 
   return {
-    enhancedJobBrief    : generateJobBrief(jobData),
-    countryContext      : countryCtxMsg,
-    topCandidates,
-    rejectedCandidates,
-    interviewQuestions  : generateInterviewQuestions(jobData),
-    emailTemplate       : generateEmailTemplate(jobData),
-    smsTemplate         : generateSMSTemplate(jobData),
+    brief          : generateBrief(jobData),
+    topCandidates  : top,
+    rejectedCandidates: rej,
+    interviewQuestions: generateQuestions(jobData),
+    jobData,
   };
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   UI LAYER — Country picker, file manager, panel transitions, render
-   ═══════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   INVITATION TEMPLATES
+   BD mode: Bangla professional + Banglish WhatsApp + English email
+   Others: professional English only
+   ═══════════════════════════════════════════════════════════ */
+function generateInvitations(candidate, jobData) {
+  const role    = jobData.role;
+  const company = '[কোম্পানির নাম / Company Name]';
+  const isBD    = jobData.countryCode === 'BD';
+  const name    = candidate.name;
+  const phone   = '[Recruiter Phone]';
 
-/* ── Country data ── */
+  if (isBD) {
+    return {
+      sms: `প্রিয় ${name} ভাই/আপু,\n\n${company} থেকে জানাচ্ছি যে ${role} পদের জন্য আপনার আবেদন বিবেচনা করা হয়েছে এবং আপনাকে ইন্টারভিউর জন্য শর্টলিস্ট করা হয়েছে।\n\nঅনুগ্রহ করে এই নম্বরে যোগাযোগ করুন: ${phone}\n\nআপনার সুবিধামত সময় জানান।\n\nধন্যবাদ।`,
+
+      whatsapp: `Assalamu Alaikum ${name} Bhai/Apu 😊\n\n${company} er ${role} position er jonno apnar CV review kora hoyeche. Apnake interview er jonno shortlist kora hoyeche! 🎉\n\nInterview details jante ba time confirm korte please reply korun ba ${phone} te call dun.\n\nAmar sathe jogajog korte parben, inshallah amar sathe kotha bolbo. 🙏\n\nDhonnobad!`,
+
+      email: `Subject: Interview Invitation — ${role} Position\n\nDear ${name},\n\nI hope you are doing well. On behalf of ${company}, I am pleased to inform you that your application for the ${role} position has been reviewed and you have been shortlisted for an interview.\n\nInterview Details:\n  Date   : [Date]\n  Time   : [Time]\n  Format : [In-Person / Video / Phone]\n  Venue  : [Location / Link]\n\nPlease confirm your availability by replying to this email or calling us at ${phone} before [RSVP Date].\n\nWe look forward to speaking with you.\n\nBest regards,\n[Recruiter Name]\n${company}`
+    };
+  }
+
+  return {
+    sms: `Dear ${name}, you have been shortlisted for the ${role} position at ${company}. Please call ${phone} or reply to this message to confirm your interview slot. We look forward to speaking with you.`,
+
+    whatsapp: `Dear ${name},\n\nGreetings from ${company}! 😊\n\nWe are pleased to inform you that you have been shortlisted for the *${role}* position.\n\nPlease reply or call ${phone} to confirm your interview time.\n\nLooking forward to speaking with you! 🙏`,
+
+    email: `Subject: Interview Invitation — ${role}\n\nDear ${name},\n\nThank you for your interest in the ${role} position at ${company}. Following a review of your application, we are pleased to invite you for an interview.\n\nInterview Details:\n  Date   : [Date]\n  Time   : [Time]\n  Format : [In-Person / Video Call]\n  Venue  : [Location / Meeting Link]\n\nKindly confirm your availability at your earliest convenience by replying to this email or contacting us at ${phone}.\n\nWe look forward to meeting you.\n\nKind regards,\n[Recruiter Name]\n${company}`
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INTERVIEW QUESTIONS
+   BD mode: Bangla + Banglish practical questions
+   Others: professional English
+   ═══════════════════════════════════════════════════════════ */
+function generateQuestions(jobData) {
+  const isBD = jobData.countryCode === 'BD';
+  const role = jobData.role;
+
+  if (isBD) {
+    return [
+      { number:1,  category:'Role-Specific',  question:'আপনার কি Facebook page/inbox manage করার অভিজ্ঞতা আছে? আপনি কোন কোন ধরনের কাজ করেছেন?', whatToAssess:'Direct role experience — page management, inbox handling, content posting', idealAnswerParameters:'Specific platform experience, volume of messages handled, type of content managed' },
+      { number:2,  category:'Role-Specific',  question:'Customer inbox e jodi ek sathe onek message ashe, apni kivabe prioritize kore handle korben? Ektu example diye bolun.', whatToAssess:'Multitasking, prioritisation, composure under pressure', idealAnswerParameters:'Triage method, response time awareness, escalation judgement' },
+      { number:3,  category:'Role-Specific',  question:'Facebook comment e jodi keu negative/abusive reply dey, apni kivabe handle korben — delete korben naki reply korben?', whatToAssess:'Moderation judgement, brand voice, de-escalation skill', idealAnswerParameters:'Context-based decision, polite acknowledgement, escalate if needed, no impulsive deletion' },
+      { number:4,  category:'Role-Specific',  question:'Ekjon customer bollen "Product ta late hocche, ekhono deliver hoy ni." Apni take ki bolben? Exact reply ta bolun.', whatToAssess:'Customer handling under complaint, empathy, COD culture awareness', idealAnswerParameters:'Acknowledge delay, apologise, provide status update, offer resolution — not blame courier' },
+      { number:5,  category:'Role-Specific',  question:'Sales baranor jonno old customer der sathe kivabe follow-up korben? Apnar plan ta describe korun.', whatToAssess:'Proactive sales mindset, retention thinking, follow-up strategy', idealAnswerParameters:'Systematic follow-up, WhatsApp/call plan, soft sell approach, relation building' },
+      { number:6,  category:'Technical',      question:'Canva, Meta Business Suite, ba Facebook Ads Manager — ei tool gulo ki apni use korte paren? Konta konta use korechen?', whatToAssess:'Tool familiarity, practical skills, self-sufficiency', idealAnswerParameters:'Specific tools used, type of tasks done, willingness to learn new tools' },
+      { number:7,  category:'Technical',      question:'Content calendar mane ki apni bujhen? Apni ki ekhono kono page er content calendar manage korechen?', whatToAssess:'Content planning understanding, organisational skill', idealAnswerParameters:'Understands posting frequency, planning ahead, coordinating content types' },
+      { number:8,  category:'Behavioural',    question:'Emon ekta situation bolun jekhan e apni ekta koshto customer ke handle korechen ebong successfully resolve korechen.', whatToAssess:'Real experience, empathy, problem resolution, outcome focus', idealAnswerParameters:'Specific story with context, action, and positive result — not generic answer' },
+      { number:9,  category:'Behavioural',    question:'Apnar jonno most challenging customer interaction ki chilo? Seta kivabe handle korlen?', whatToAssess:'Resilience, maturity, learning from difficult situations', idealAnswerParameters:'Honest account, professional response, lesson learned' },
+      { number:10, category:'Situational',    question:'Jodi kono customer bolte thake "apnader product fake" and Facebook e post kore, apni ki step gulo neben?', whatToAssess:'Crisis management, escalation judgement, brand protection', idealAnswerParameters:'Private message first, do not argue publicly, escalate to supervisor, document the interaction' },
+      { number:11, category:'Situational',    question:'Ek sathe 50+ inbox message ase. Boss o urgent task diyechen. Apni ki korben?', whatToAssess:'Pressure handling, prioritisation, communication with supervisor', idealAnswerParameters:'Triage inbox, handle critical queries first, inform boss of conflict, seek guidance' },
+      { number:12, category:'Culture Fit',    question:'Apni ki ek sathe Bangla ar English e communication korte parben? Ektu Bangla e ekta customer reply likhe dekhaan.', whatToAssess:'Bilingual communication, Bangla typing, professional tone', idealAnswerParameters:'Polite Bangla message with professional tone, correct spelling, appropriate honorifics' },
+      { number:13, category:'Culture Fit',    question:'Remote kaje kemon feel koren? Supervision chara nijen ke motivated rakhte paren ki?', whatToAssess:'Self-management, remote work readiness, intrinsic motivation', idealAnswerParameters:'Clear work routine, accountability, proactive updates to team, no need for micromanagement' },
+      { number:14, category:'Legal Compliance', question:'Customer data, order details ba personal information — ei gulo ki apni confidential rakhen? Kono example dite parben?', whatToAssess:'Data privacy awareness, professional discretion', idealAnswerParameters:'Does not share customer data externally, password-protects accounts, understands sensitivity' },
+      { number:15, category:'Country-Specific', question:'Bangladesh er ecommerce market e COD (Cash on Delivery) system ei ki ki common problem ase? Apni kivabe seta handle korben?', whatToAssess:'Local market awareness, COD-specific challenges, practical solutions', idealAnswerParameters:'Fake orders, address verification, delivery follow-up, order cancellation reduction strategies' },
+    ];
+  }
+
+  // Non-BD English questions
+  return [
+    { number:1,  category:'Role-Specific',  question:`Describe your experience managing a Facebook page or social media inbox. What types of tasks did you handle daily?`, whatToAssess:'Direct role experience and scope of responsibility', idealAnswerParameters:'Volume of messages, content types, moderation decisions, escalation history' },
+    { number:2,  category:'Role-Specific',  question:'How do you handle a high volume of customer messages or comments at the same time? Walk me through your process.', whatToAssess:'Prioritisation, composure, systematic approach', idealAnswerParameters:'Triage method, response time targets, template use, escalation logic' },
+    { number:3,  category:'Role-Specific',  question:'A customer leaves a negative comment on your page publicly. How do you respond?', whatToAssess:'Brand voice, de-escalation, public vs. private response judgement', idealAnswerParameters:'Acknowledge publicly, move to DM for resolution, no arguments, professional tone' },
+    { number:4,  category:'Role-Specific',  question:'How would you handle an angry customer complaining about a late delivery?', whatToAssess:'Empathy, customer retention, complaint resolution', idealAnswerParameters:'Apologise, confirm status, offer solution, follow up after resolution' },
+    { number:5,  category:'Technical',      question:`Which social media management or communication tools have you used? (e.g. Meta Business Suite, Canva, CRM tools)`, whatToAssess:'Tool competency and self-sufficiency', idealAnswerParameters:'Specific tools, tasks performed, initiative to learn new tools' },
+    { number:6,  category:'Technical',      question:'Have you managed a content calendar? How did you plan and schedule content?', whatToAssess:'Content planning, organisational discipline', idealAnswerParameters:'Posting frequency management, coordination with design/copy, use of scheduling tools' },
+    { number:7,  category:'Behavioural',    question:'Tell me about a time you successfully resolved a very difficult customer complaint.', whatToAssess:'Real experience, empathy, outcome focus', idealAnswerParameters:'STAR format — specific situation, action taken, positive resolution, lesson learned' },
+    { number:8,  category:'Behavioural',    question:'Describe a time you had to manage multiple urgent tasks simultaneously. How did you prioritise?', whatToAssess:'Multitasking, decision-making under pressure', idealAnswerParameters:'Clear prioritisation method, communication with stakeholders, on-time delivery' },
+    { number:9,  category:'Situational',    question:'A customer posts publicly that your product is fake. What steps do you take?', whatToAssess:'Crisis management, brand protection, escalation', idealAnswerParameters:'Private message, escalate to supervisor, document, do not argue publicly' },
+    { number:10, category:'Situational',    question:'Your inbox has 80 unread messages and your manager gives you an urgent task. How do you handle it?', whatToAssess:'Pressure handling, prioritisation, communication', idealAnswerParameters:'Triage critical messages, inform manager of conflict, handle both systematically' },
+    { number:11, category:'Culture Fit',    question:'What motivates you to stay productive and engaged in a customer-facing support role?', whatToAssess:'Intrinsic motivation, role fit, sustainability', idealAnswerParameters:'Genuine interest in helping people, satisfaction from resolution, growth mindset' },
+    { number:12, category:'Culture Fit',    question:'How do you handle repetitive tasks without losing quality or attention to detail?', whatToAssess:'Consistency, professionalism, attention to detail', idealAnswerParameters:'Systems/checklists, mindset approach, quality over speed mentality' },
+    { number:13, category:'Technical',      question:'How comfortable are you with switching between Bangla and English communication professionally?', whatToAssess:'Bilingual capability, adaptability, professional tone in both languages', idealAnswerParameters:'Fluent in both, adapts tone per audience, no mixing inappropriately' },
+    { number:14, category:'Legal Compliance', question:'How do you ensure customer data and order information remains confidential?', whatToAssess:'Data privacy awareness, professional discretion', idealAnswerParameters:'Does not share externally, secure access, understands sensitivity' },
+    { number:15, category:'Role-Specific',  question:'What do you consider the most important quality for someone in this role, and how do you demonstrate it?', whatToAssess:'Self-awareness, role alignment, values match', idealAnswerParameters:'Answer aligns with core demands — responsiveness, empathy, accuracy, consistency' },
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BRIEF GENERATOR
+   ═══════════════════════════════════════════════════════════ */
+function generateBrief(jd) {
+  const isBD   = jd.countryCode === 'BD';
+  const market = isBD ? 'the Bangladesh e-commerce and digital marketing market' : `the ${jd.country} market`;
+  const reqs   = jd.reqs ? ` Key requirements: ${jd.reqs.replace(/\n/g,', ')}.` : '';
+  return `We are seeking a ${jd.role} to join our ${jd.industry} team for ${market}. ${jd.numPos} position(s) available at the ${jd.expLevel === 'any' ? 'appropriate' : jd.expLevel} level.${reqs} The ideal candidate has direct experience in social media moderation, inbox/customer communication, and is comfortable working in a fast-paced digital environment.${isBD ? ' Bangladesh-specific experience with Facebook business pages, COD order handling, and Bangla/English bilingual communication is highly preferred.' : ''}`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RENDER RESULTS
+   ═══════════════════════════════════════════════════════════ */
+// Store invitations for modal access
+let invitationStore = {};
+
+function renderResults(d) {
+  const { topCandidates: top, rejectedCandidates: rej, interviewQuestions: qs, jobData } = d;
+
+  document.getElementById('rDesc').textContent =
+    `${top.length} recommended · ${rej.length} not recommended · ${qs.length} interview questions · Market: ${sCountry}`;
+  document.getElementById('topCnt').textContent = top.length;
+  document.getElementById('rejCnt').textContent = rej.length;
+  document.getElementById('briefTxt').textContent = d.brief;
+
+  // Build invitation store
+  invitationStore = {};
+  [...top, ...rej].forEach(c => {
+    invitationStore[c.name] = generateInvitations(c, jobData);
+  });
+
+  // ── Ranking explanation (top 3) ─────────────────────────
+  const rankHtml = top.slice(0, 3).map((c, i) => {
+    const emoji = ['🥇','🥈','🥉'][i];
+    const cls   = ['r1','r2','r3'][i];
+    const why   = c.whyHire || 'Highest overall match score.';
+    return `<div class="rank-row">
+      <div class="rank-num ${cls}">${emoji}</div>
+      <div class="rank-info">
+        <div class="rank-name">${esc(c.name)}</div>
+        <div class="rank-why">${esc(why)}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <span class="rating-badge ${getRatingBadgeClass(c.rating)}">${esc(c.rating)}</span>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--text);margin-top:4px;">${c.matchScore}<span style="font-size:11px;color:var(--slate)">/100</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('rankExplain').innerHTML =
+    top.length > 0
+      ? `<div class="rank-explain">${rankHtml}</div>`
+      : `<p style="color:var(--slate);font-size:13px;font-family:'JetBrains Mono',monospace;">No candidates met the recommendation threshold (50+).</p>`;
+
+  // ── Candidate card renderer ─────────────────────────────
+  function renderCard(c, isTop) {
+    const rc    = getRatingClass(c.rating);
+    const badge = getRatingBadgeClass(c.rating);
+    const bkd   = c.breakdown;
+
+    // Score bar rows
+    const bars = [
+      { label:'Role Relevance',    val: bkd.roleScore,    max:25 },
+      { label:'Support / Inbox',   val: bkd.supportScore, max:20 },
+      { label:'Social / Mod',      val: bkd.socialScore,  max:20 },
+      { label:'Sales / Convert',   val: bkd.salesScore,   max:15 },
+      { label:'Communication',     val: bkd.commScore,    max:10 },
+      { label:'Tools / Platforms', val: bkd.toolScore,    max:10 },
+    ];
+    const barColor = { excellent:'#3db87a', strong:'#5b8dee', moderate:'var(--gold)', weak:'var(--warn)', no:'var(--danger)' };
+    const barsHtml = bars.map(b => {
+      const pct = Math.round((b.val / b.max) * 100);
+      return `<div class="breakdown-row">
+        <div class="br-label" title="${b.label}">${b.label}</div>
+        <div class="br-bar-wrap"><div class="br-bar" style="width:${pct}%;background:${barColor[rc]};"></div></div>
+        <div class="br-val">${b.val}/${b.max}</div>
+      </div>`;
+    }).join('');
+
+    const strHtml = c.strengths.map(s => `<div class="sw-item">${esc(s)}</div>`).join('');
+    const wkHtml  = c.weaknesses.map(w => `<div class="sw-item">${esc(w)}</div>`).join('');
+
+    const recHtml = `<div class="rec-box ${isTop ? 'yes' : 'no'}">
+      <b>${isTop ? '✓ Why Recommended' : '✗ Why Not Recommended'}</b>
+      ${esc(isTop ? c.whyHire : c.whyRejected)}
+    </div>`;
+
+    const contactHtml = `<div class="cc-contact">
+      ${c.phone    !== 'N/A' ? `<div class="cc-contact-row"><span class="lbl">Phone</span><span class="val">${esc(c.phone)}</span></div>` : ''}
+      ${c.email    !== 'N/A' ? `<div class="cc-contact-row"><span class="lbl">Email</span><span class="val">${esc(c.email)}</span></div>` : ''}
+      ${c.linkedin !== 'N/A' ? `<div class="cc-contact-row"><span class="lbl">LinkedIn</span><span class="val"><a href="https://${esc(c.linkedin)}" target="_blank">${esc(c.linkedin)}</a></span></div>` : ''}
+      ${c.address  !== 'N/A' ? `<div class="cc-contact-row"><span class="lbl">Address</span><span class="val">${esc(c.address)}</span></div>` : ''}
+    </div>`;
+
+    const warn = c.parseWarning ? `<div style="font-size:10px;color:var(--warn);font-family:'JetBrains Mono',monospace;padding:6px 0;margin-bottom:8px;">⚠ ${esc(c.parseWarning)}</div>` : '';
+
+    const invBtn = isTop ? `<div class="invite-strip">
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','sms')">📱 SMS</button>
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','wa')">💬 WhatsApp</button>
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','email')">✉ Email</button>
+    </div>` : '';
+
+    const rankLabel = isTop && c.rank
+      ? `<div class="cc-rank">${c.rank === 1 ? '🥇' : c.rank === 2 ? '🥈' : c.rank === 3 ? '🥉' : `#${c.rank}`}</div>`
+      : `<div class="cc-rank" style="color:var(--danger);">✗</div>`;
+
+    return `<div class="cc">
+      <div class="cc-top ${rc}"></div>
+      <div class="cc-body">
+        <div class="cc-header">
+          <div>
+            <div class="cc-name">${esc(c.name)}</div>
+            <div class="cc-file">📄 ${esc(c.fileName)} · 💼 ${esc(c.experience)}</div>
+            <div style="margin-top:7px;"><span class="rating-badge ${badge}">${esc(c.rating)}</span></div>
+          </div>
+          ${rankLabel}
+        </div>
+        ${warn}
+        <div class="cc-score-row">
+          <div class="cc-score-big ${rc}">${c.matchScore}</div>
+          <div class="cc-score-meta">
+            <div class="cc-score-max">/ 100</div>
+            <div style="font-size:11px;color:var(--text2);">Total Score</div>
+          </div>
+        </div>
+        <div class="breakdown">${barsHtml}</div>
+        <div class="sw-grid">
+          <div class="sw-box strengths">
+            <div class="sw-title">✓ Strong Points</div>
+            ${strHtml || '<div class="sw-item">No strengths detected</div>'}
+          </div>
+          <div class="sw-box weaknesses">
+            <div class="sw-title">✗ Weak Points</div>
+            ${wkHtml || '<div class="sw-item">No major weaknesses</div>'}
+          </div>
+        </div>
+        ${recHtml}
+        ${contactHtml}
+        ${invBtn}
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('topGrid').innerHTML =
+    top.length ? top.map(c => renderCard(c, true)).join('') : '<p style="color:var(--slate);font-size:13px;font-family:\'JetBrains Mono\',monospace;">No candidates scored 50 or above.</p>';
+  document.getElementById('rejGrid').innerHTML =
+    rej.length ? rej.map(c => renderCard(c, false)).join('') : '<p style="color:var(--slate);font-size:13px;font-family:\'JetBrains Mono\',monospace;">All candidates were recommended.</p>';
+
+  // ── Interview questions ────────────────────────────────
+  const catMap = { Technical:'qt', Behavioural:'qb', Situational:'qs', 'Culture Fit':'qc', 'Role-Specific':'qr', 'Legal Compliance':'ql', 'Country-Specific':'qk' };
+  document.getElementById('qBody').innerHTML = qs.map(q => `<tr>
+    <td class="tn">${q.number}</td>
+    <td><span class="qcat ${catMap[q.category]||'qr'}">${esc(q.category)}</span></td>
+    <td>${esc(q.question)}</td>
+    <td style="font-size:11px;color:var(--slate);">${esc(q.whatToAssess)}</td>
+    <td style="font-size:11px;color:var(--success);">${esc(q.idealAnswerParameters)}</td>
+  </tr>`).join('');
+
+  // ── Contact directory ──────────────────────────────────
+  const allC = [
+    ...top.map((c,i) => ({...c, status:`Rank #${i+1}`, sbCls:'sb-ok'})),
+    ...rej.map(c      => ({...c, status:'Not Recommended', sbCls:'sb-no'})),
+  ];
+  document.getElementById('ctBody').innerHTML = allC.map(c => `<tr>
+    <td><b style="color:var(--text);font-weight:600;">${esc(c.name)}</b></td>
+    <td><span class="rating-badge ${getRatingBadgeClass(c.rating)}" style="font-size:10px;">${esc(c.rating)}</span></td>
+    <td class="tn">${c.matchScore}/100</td>
+    <td>${c.email   !=='N/A'?`<div class="chip" onclick="copyVal('${esc(c.email)}')">✉ ${esc(c.email)}</div>`:'<span style="color:var(--slate)">—</span>'}</td>
+    <td>${c.phone   !=='N/A'?`<div class="chip" onclick="copyVal('${esc(c.phone)}')">✆ ${esc(c.phone)}</div>`:'<span style="color:var(--slate)">—</span>'}</td>
+    <td>${c.linkedin!=='N/A'?`<div class="chip" onclick="copyVal('https://${esc(c.linkedin)}')">⌂ Profile</div>`:'<span style="color:var(--slate)">—</span>'}</td>
+    <td>${c.status==='Not Recommended'?'—':`<div style="display:flex;gap:4px;">
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','sms')">📱</button>
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','wa')">💬</button>
+      <button class="invite-btn" onclick="openInviteModal('${esc(c.name)}','email')">✉</button>
+    </div>`}</td>
+  </tr>`).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INVITE MODAL
+   ═══════════════════════════════════════════════════════════ */
+let currentModalCandidate = null;
+let currentModalType      = 'sms';
+
+function openInviteModal(name, type) {
+  currentModalCandidate = name;
+  currentModalType      = type;
+  const inv = invitationStore[name];
+  if (!inv) return;
+  document.getElementById('modalCandidateName').textContent = name;
+  document.getElementById('inviteModal').classList.add('open');
+  updateModalContent(type);
+}
+
+function updateModalContent(type) {
+  const inv = invitationStore[currentModalCandidate];
+  if (!inv) return;
+  document.getElementById('modalMsg').textContent = inv[type] || '';
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mtab').forEach(t => {
+    if (t.textContent.toLowerCase().replace('whatsapp','wa') === type ||
+        (type === 'wa' && t.textContent === 'WhatsApp') ||
+        (type === 'sms' && t.textContent === 'SMS') ||
+        (type === 'email' && t.textContent === 'Email')) {
+      t.classList.add('active');
+    }
+  });
+}
+
+function switchTab(type, el) {
+  currentModalType = type;
+  document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  updateModalContent(type);
+}
+
+function copyModalMsg() {
+  const t = document.getElementById('modalMsg').textContent;
+  navigator.clipboard.writeText(t).then(() => toast('Copied!'));
+}
+
+function closeModal() {
+  document.getElementById('inviteModal').classList.remove('open');
+}
+document.getElementById('inviteModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('inviteModal')) closeModal();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   EXCEL EXPORT (4 sheets)
+   ═══════════════════════════════════════════════════════════ */
+function exportExcel() {
+  if (!resultData) { toast('No results to export yet.'); return; }
+  const d  = resultData;
+  const wb = XLSX.utils.book_new();
+  const all = [...(d.topCandidates||[]), ...(d.rejectedCandidates||[])];
+
+  // Sheet 1: Rankings
+  const ws1 = XLSX.utils.aoa_to_sheet([
+    ['Rank','Name','Rating','Score /100','Status','Why Recommended / Rejected'],
+    ...all.map((c,i) => [
+      c.rank || '—',
+      c.name,
+      c.rating,
+      c.matchScore,
+      c.isRecommended ? 'Recommended' : 'Not Recommended',
+      c.isRecommended ? c.whyHire : c.whyRejected,
+    ])
+  ]);
+  ws1['!cols'] = [6,24,18,10,18,70].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws1, 'Rankings');
+
+  // Sheet 2: Candidate Details
+  const ws2 = XLSX.utils.aoa_to_sheet([
+    ['Name','File','Rating','Score','Experience','Strengths','Weaknesses','Recommendation','Role /25','Support /20','Social /20','Sales /15','Communication /10','Tools /10'],
+    ...all.map(c => [
+      c.name, c.fileName, c.rating, c.matchScore, c.experience,
+      (c.strengths||[]).join(' | '),
+      (c.weaknesses||[]).join(' | '),
+      c.isRecommended ? c.whyHire : c.whyRejected,
+      c.breakdown.roleScore, c.breakdown.supportScore, c.breakdown.socialScore,
+      c.breakdown.salesScore, c.breakdown.commScore, c.breakdown.toolScore,
+    ])
+  ]);
+  ws2['!cols'] = [24,22,18,8,12,55,55,60,8,8,8,8,12,8].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws2, 'Candidate Details');
+
+  // Sheet 3: Contact & Invitation
+  const ws3rows = [['Name','Phone','Email','LinkedIn','Address','SMS Invite','WhatsApp Invite','Email Invite']];
+  all.forEach(c => {
+    const inv = generateInvitations(c, d.jobData);
+    ws3rows.push([c.name, c.phone, c.email, c.linkedin, c.address, inv.sms, inv.whatsapp, inv.email]);
+  });
+  const ws3 = XLSX.utils.aoa_to_sheet(ws3rows);
+  ws3['!cols'] = [24,16,32,36,30,60,60,80].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws3, 'Contact & Invitation');
+
+  // Sheet 4: Interview Questions
+  const ws4 = XLSX.utils.aoa_to_sheet([
+    ['#','Category','Question','What to Assess','Ideal Answer'],
+    ...(d.interviewQuestions||[]).map(q => [q.number, q.category, q.question, q.whatToAssess, q.idealAnswerParameters])
+  ]);
+  ws4['!cols'] = [4,18,65,40,65].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws4, 'Interview Questions');
+
+  const fname = `Meridian_${sRole.replace(/\s+/g,'_')}_${sCountry.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, fname);
+  toast('Report exported successfully.');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   COUNTRY DATA & PICKER
+   ═══════════════════════════════════════════════════════════ */
 const COUNTRIES = [
   {c:'BD',n:'Bangladesh',f:'🇧🇩',r:'South Asia'},
   {c:'US',n:'United States',f:'🇺🇸',r:'North America'},
@@ -1082,58 +1249,35 @@ const COUNTRIES = [
   {c:'AU',n:'Australia',f:'🇦🇺',r:'Oceania'},
   {c:'CA',n:'Canada',f:'🇨🇦',r:'North America'},
   {c:'DE',n:'Germany',f:'🇩🇪',r:'Europe'},
-  {c:'FR',n:'France',f:'🇫🇷',r:'Europe'},
   {c:'IN',n:'India',f:'🇮🇳',r:'South Asia'},
   {c:'PK',n:'Pakistan',f:'🇵🇰',r:'South Asia'},
   {c:'MY',n:'Malaysia',f:'🇲🇾',r:'Southeast Asia'},
   {c:'QA',n:'Qatar',f:'🇶🇦',r:'Middle East'},
   {c:'KW',n:'Kuwait',f:'🇰🇼',r:'Middle East'},
-  {c:'BH',n:'Bahrain',f:'🇧🇭',r:'Middle East'},
-  {c:'OM',n:'Oman',f:'🇴🇲',r:'Middle East'},
-  {c:'JP',n:'Japan',f:'🇯🇵',r:'East Asia'},
-  {c:'KR',n:'South Korea',f:'🇰🇷',r:'East Asia'},
-  {c:'CN',n:'China',f:'🇨🇳',r:'East Asia'},
-  {c:'NL',n:'Netherlands',f:'🇳🇱',r:'Europe'},
-  {c:'SE',n:'Sweden',f:'🇸🇪',r:'Europe'},
-  {c:'CH',n:'Switzerland',f:'🇨🇭',r:'Europe'},
-  {c:'NZ',n:'New Zealand',f:'🇳🇿',r:'Oceania'},
-  {c:'ZA',n:'South Africa',f:'🇿🇦',r:'Africa'},
-  {c:'NG',n:'Nigeria',f:'🇳🇬',r:'Africa'},
-  {c:'EG',n:'Egypt',f:'🇪🇬',r:'Africa/Middle East'},
-  {c:'BR',n:'Brazil',f:'🇧🇷',r:'Latin America'},
-  {c:'MX',n:'Mexico',f:'🇲🇽',r:'Latin America'},
-  {c:'IT',n:'Italy',f:'🇮🇹',r:'Europe'},
-  {c:'ES',n:'Spain',f:'🇪🇸',r:'Europe'},
   {c:'PH',n:'Philippines',f:'🇵🇭',r:'Southeast Asia'},
   {c:'ID',n:'Indonesia',f:'🇮🇩',r:'Southeast Asia'},
   {c:'TH',n:'Thailand',f:'🇹🇭',r:'Southeast Asia'},
   {c:'VN',n:'Vietnam',f:'🇻🇳',r:'Southeast Asia'},
   {c:'LK',n:'Sri Lanka',f:'🇱🇰',r:'South Asia'},
   {c:'NP',n:'Nepal',f:'🇳🇵',r:'South Asia'},
-  {c:'IE',n:'Ireland',f:'🇮🇪',r:'Europe'},
-  {c:'PT',n:'Portugal',f:'🇵🇹',r:'Europe'},
-  {c:'TR',n:'Turkey',f:'🇹🇷',r:'Europe/Middle East'},
-  {c:'PL',n:'Poland',f:'🇵🇱',r:'Europe'},
-  {c:'AR',n:'Argentina',f:'🇦🇷',r:'Latin America'},
-  {c:'CO',n:'Colombia',f:'🇨🇴',r:'Latin America'},
-  {c:'KE',n:'Kenya',f:'🇰🇪',r:'Africa'},
-  {c:'MA',n:'Morocco',f:'🇲🇦',r:'Africa'},
-  {c:'IL',n:'Israel',f:'🇮🇱',r:'Middle East'},
-  {c:'HK',n:'Hong Kong',f:'🇭🇰',r:'East Asia'},
-  {c:'TW',n:'Taiwan',f:'🇹🇼',r:'East Asia'},
-  {c:'UA',n:'Ukraine',f:'🇺🇦',r:'Europe'},
+  {c:'NG',n:'Nigeria',f:'🇳🇬',r:'Africa'},
   {c:'GH',n:'Ghana',f:'🇬🇭',r:'Africa'},
+  {c:'KE',n:'Kenya',f:'🇰🇪',r:'Africa'},
+  {c:'EG',n:'Egypt',f:'🇪🇬',r:'Africa/Middle East'},
+  {c:'ZA',n:'South Africa',f:'🇿🇦',r:'Africa'},
+  {c:'BR',n:'Brazil',f:'🇧🇷',r:'Latin America'},
+  {c:'MX',n:'Mexico',f:'🇲🇽',r:'Latin America'},
+  {c:'FR',n:'France',f:'🇫🇷',r:'Europe'},
+  {c:'NL',n:'Netherlands',f:'🇳🇱',r:'Europe'},
+  {c:'TR',n:'Turkey',f:'🇹🇷',r:'Europe/Middle East'},
 ];
 let selCtry = null, filtCtry = [...COUNTRIES];
 
 function renderDd(list) {
   document.getElementById('ctryDd').innerHTML = list.map(x =>
-    `<div class="c-opt${selCtry && selCtry.c === x.c ? ' sel' : ''}" onmousedown="pickCtry('${x.c}')">
-      <span class="c-flag">${x.f}</span>
-      <span class="c-nm">${x.n}</span>
-      <span class="c-reg">${x.r}</span>
-    </div>`
-  ).join('');
+    `<div class="c-opt${selCtry&&selCtry.c===x.c?' sel':''}" onmousedown="pickCtry('${x.c}')">
+      <span class="c-flag">${x.f}</span><span class="c-nm">${x.n}</span><span class="c-reg">${x.r}</span>
+    </div>`).join('');
 }
 function filterCtry(v) {
   filtCtry = COUNTRIES.filter(x => x.n.toLowerCase().includes(v.toLowerCase()) || x.r.toLowerCase().includes(v.toLowerCase()));
@@ -1149,7 +1293,9 @@ function pickCtry(code) {
   closeCtry();
 }
 
-/* ── File management ── */
+/* ═══════════════════════════════════════════════════════════
+   FILE MANAGEMENT
+   ═══════════════════════════════════════════════════════════ */
 let files = [];
 const dzEl = document.getElementById('dz');
 dzEl.addEventListener('dragover',  e => { e.preventDefault(); dzEl.classList.add('hover'); });
@@ -1160,45 +1306,45 @@ document.getElementById('fileInput').addEventListener('change', e => addFiles([.
 function addFiles(list) {
   list.forEach(f => {
     const ext = f.name.split('.').pop().toLowerCase();
-    if (!['pdf', 'txt'].includes(ext)) {
-      toast(`Skipped ${f.name} — only PDF and TXT are supported.`); return;
-    }
+    if (!['pdf','txt'].includes(ext)) { toast(`Skipped ${f.name} — only PDF/TXT supported.`); return; }
     if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f);
   });
   renderPills();
 }
-function removeFile(i) { files.splice(i, 1); renderPills(); }
+function removeFile(i) { files.splice(i,1); renderPills(); }
 function renderPills() {
-  document.getElementById('fPills').innerHTML = files.map((f, i) =>
+  document.getElementById('fPills').innerHTML = files.map((f,i) =>
     `<div class="f-pill">
-      <span class="fp-ic">📄</span>
+      <span>📄</span>
       <span class="fp-nm">${esc(f.name)}</span>
-      <span class="fp-sz">${(f.size / 1024).toFixed(1)} KB</span>
+      <span class="fp-sz">${(f.size/1024).toFixed(1)} KB</span>
       <button class="fp-del" onclick="removeFile(${i})">✕</button>
-    </div>`
-  ).join('');
+    </div>`).join('');
 }
 
-/* ── Panel transitions ── */
+/* ═══════════════════════════════════════════════════════════
+   PANEL TRANSITIONS
+   ═══════════════════════════════════════════════════════════ */
 function showPanel(n) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('p' + n).classList.add('active');
-  [1, 2, 3].forEach(i => {
-    const nd = document.getElementById('pn' + i);
-    const ln = document.getElementById('pl' + i);
-    nd.classList.remove('active', 'done');
+  [1,2,3].forEach(i => {
+    const nd = document.getElementById('pn'+i);
+    const ln = document.getElementById('pl'+i);
+    nd.classList.remove('active','done');
     if (ln) ln.classList.remove('done');
-    if (i < n)       { nd.classList.add('done'); if (ln) ln.classList.add('done'); }
-    else if (i === n)  nd.classList.add('active');
+    if (i < n) { nd.classList.add('done'); if (ln) ln.classList.add('done'); }
+    else if (i === n) nd.classList.add('active');
   });
 }
-function lsRun(id)  { const e = document.getElementById(id); if (e) { e.classList.add('run');  e.querySelector('.l-ic').textContent = '◐'; } }
-function lsDone(id) { const e = document.getElementById(id); if (e) { e.classList.remove('run'); e.classList.add('done'); e.querySelector('.l-ic').textContent = '✓'; } }
+function lsRun(id)  { const e=document.getElementById(id); if(e){e.classList.add('run');e.querySelector('.l-ic').textContent='◐';} }
+function lsDone(id) { const e=document.getElementById(id); if(e){e.classList.remove('run');e.classList.add('done');e.querySelector('.l-ic').textContent='✓';} }
 
-/* ── State ── */
+/* ═══════════════════════════════════════════════════════════
+   MAIN ENTRY
+   ═══════════════════════════════════════════════════════════ */
 let resultData = null, sRole = '', sIndustry = '', sCountry = '';
 
-/* ── Main entry point ── */
 async function startAnalysis() {
   const industry = document.getElementById('industry').value.trim();
   const role     = document.getElementById('role').value.trim();
@@ -1206,289 +1352,69 @@ async function startAnalysis() {
   if (!files.length)      { toast('Please upload at least one CV (PDF or TXT).'); return; }
 
   sRole = role; sIndustry = industry; sCountry = selCtry ? selCtry.n : 'Not specified';
-  const expLevel = document.getElementById('expLevel').value;
-  const numPos   = document.getElementById('numPos').value;
-  const reqs     = document.getElementById('reqs').value.trim();
-
   const jobData = {
-    industry, role, expLevel,
-    numPos    : parseInt(numPos, 10) || 1,
-    reqs,
+    industry, role,
+    expLevel    : document.getElementById('expLevel').value,
+    numPos      : parseInt(document.getElementById('numPos').value, 10) || 1,
+    reqs        : document.getElementById('reqs').value.trim(),
     country     : sCountry,
     countryCode : selCtry ? selCtry.c : null,
   };
 
-  // Switch to loading panel and start visual progress
-  showPanel(2);
-  lsRun('ls1');
+  showPanel(2); lsRun('ls1');
+  await delay(60);
 
-  // Small delay lets the DOM repaint before CPU-heavy work starts
-  await delay(80);
   lsDone('ls1'); lsRun('ls2');
-
-  // Read all CV files (async, PDF.js may take time)
   const cvs = [];
   for (const f of files) {
     const content = await readFile(f);
-    cvs.push({ name: f.name, content }); // No truncation needed — local is free
+    cvs.push({ name: f.name, content });
   }
 
-  lsDone('ls2'); lsRun('ls3');
-  await delay(60);
-
-  lsDone('ls3'); lsRun('ls4');
-  await delay(60);
+  lsDone('ls2'); lsRun('ls3'); await delay(60);
+  lsDone('ls3'); lsRun('ls4'); await delay(60);
 
   try {
-    // Run the local scoring engine
     resultData = analyzeCandidatesLocally(jobData, cvs);
-
-    lsDone('ls4'); lsRun('ls5');
-    await delay(60);
-    lsDone('ls5'); lsRun('ls6');
-    await delay(60);
+    lsDone('ls4'); lsRun('ls5'); await delay(60);
+    lsDone('ls5'); lsRun('ls6'); await delay(60);
     lsDone('ls6');
-
     renderResults(resultData);
     showPanel(3);
-
   } catch (err) {
-    console.error('Analysis error:', err);
-    toast('Analysis error: ' + err.message);
+    console.error(err);
+    toast('Error: ' + err.message);
     showPanel(1);
   }
 }
 
-/** Tiny promise-based delay to keep the UI responsive. */
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/* ─────────────────────────────────────────────────────────────────
-   RENDER RESULTS
-   Unchanged from original Meridian — populates Panel 3 with data.
-   ───────────────────────────────────────────────────────────────── */
-function renderResults(d) {
-  const top = d.topCandidates || [];
-  const rej = d.rejectedCandidates || [];
-  const qs  = d.interviewQuestions || [];
-
-  document.getElementById('rDesc').textContent =
-    `${top.length} candidate(s) recommended · ${rej.length} not recommended · ${qs.length} interview questions · Market: ${sCountry}`;
-  document.getElementById('topCnt').textContent = top.length;
-  document.getElementById('rejCnt').textContent = rej.length;
-  document.getElementById('briefTxt').textContent = d.enhancedJobBrief || '';
-
-  if (d.countryContext) {
-    const cn = document.getElementById('ctryNote');
-    cn.style.display = 'block';
-    cn.textContent = '◆  ' + d.countryContext;
-  }
-
-  // Top candidates
-  document.getElementById('topGrid').innerHTML = top.map((c, i) => {
-    const cc    = i === 0 ? 'c-g' : i === 1 ? 'c-s' : 'c-b';
-    const badge = i === 0 ? '🥇'  : i === 1 ? '🥈'  : '🥉';
-    const sc    = c.matchScore >= 70 ? 'hi' : c.matchScore >= 55 ? 'md' : 'lo';
-    const bar   = c.matchScore >= 70 ? 'bg' : c.matchScore >= 55 ? 'by' : 'br';
-    return `<div class="cc ${cc}">
-      <div class="rank-b">${badge}</div>
-      <div class="c-name">${esc(c.name)}</div>
-      <div class="c-meta">📄 ${esc(c.fileName)} &nbsp;·&nbsp; 💼 ${esc(c.experience || 'N/A')}</div>
-      <div class="sc-row">
-        <div class="sc-num ${sc}">${c.matchScore}<span style="font-size:12px;color:var(--slate);font-weight:400">%</span></div>
-        <div class="sc-track"><div class="sc-bar ${bar}" style="width:${c.matchScore}%"></div></div>
-      </div>
-      <div class="stags">${(c.keySkills || []).map(s => `<span class="stag">${esc(s)}</span>`).join('')}</div>
-      <div class="r-box">
-        <b>Assessment:</b> ${esc(c.whyHire || '')}
-        ${c.gaps && c.gaps.length
-          ? `<br><br><b style="color:var(--warn)">Areas to Probe:</b> ${c.gaps.map(g => `<span class="stag stag-r">${esc(g)}</span>`).join(' ')}`
-          : ''}
-      </div>
-      <div class="ct-strip">
-        ${c.email    && c.email    !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.email)}')">✉ ${esc(c.email)}</div>` : ''}
-        ${c.phone    && c.phone    !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.phone)}')">✆ ${esc(c.phone)}</div>` : ''}
-        ${c.linkedin && c.linkedin !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.linkedin)}')">⌂ LinkedIn</div>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-
-  // Rejected candidates
-  document.getElementById('rejGrid').innerHTML = rej.map(c => `
-    <div class="cc c-r">
-      <div class="rank-b">✗</div>
-      <div class="c-name">${esc(c.name)}</div>
-      <div class="c-meta">📄 ${esc(c.fileName)}</div>
-      <div class="sc-row">
-        <div class="sc-num lo">${c.matchScore}<span style="font-size:12px;color:var(--slate);font-weight:400">%</span></div>
-        <div class="sc-track"><div class="sc-bar br" style="width:${c.matchScore}%"></div></div>
-      </div>
-      <div class="r-box">
-        <b style="color:var(--danger)">Decision:</b> ${esc(c.whyRejected || '')}
-        <br><br><b>Missing Criteria:</b> ${(c.missingRequirements || []).map(r => `<span class="stag stag-r">${esc(r)}</span>`).join(' ') || '<span style="color:var(--slate)">None specified</span>'}
-      </div>
-      <div class="ct-strip">
-        ${c.email && c.email !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.email)}')">✉ ${esc(c.email)}</div>` : ''}
-        ${c.phone && c.phone !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.phone)}')">✆ ${esc(c.phone)}</div>` : ''}
-      </div>
-    </div>`
-  ).join('');
-
-  // Interview questions table
-  const catMap = {
-    Technical: 'qt', Behavioural: 'qb', Situational: 'qs',
-    'Culture Fit': 'qc', 'Role-Specific': 'qr', 'Legal Compliance': 'ql', 'Country-Specific': 'qk',
-  };
-  document.getElementById('qBody').innerHTML = qs.map(q => `
-    <tr>
-      <td class="tn">${q.number}</td>
-      <td><span class="qcat ${catMap[q.category] || 'qr'}">${esc(q.category)}</span></td>
-      <td>${esc(q.question)}</td>
-      <td style="font-size:11px;color:var(--slate);">${esc(q.whatToAssess)}</td>
-      <td style="font-size:11px;color:var(--success);">${esc(q.idealAnswerParameters)}</td>
-    </tr>`
-  ).join('');
-
-  // Contact directory
-  const all = [
-    ...top.map((c, i) => ({ ...c, status: `Rank #${i + 1}`, sbCls: 'sb-ok' })),
-    ...rej.map(c      => ({ ...c, status: 'Not Recommended',  sbCls: 'sb-no' })),
-  ];
-  document.getElementById('ctBody').innerHTML = all.map(c => `
-    <tr>
-      <td><b style="color:var(--text);font-weight:600;">${esc(c.name)}</b></td>
-      <td><span class="sbadge ${c.sbCls}">${c.status}</span></td>
-      <td>${c.email    && c.email    !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.email)}')" style="display:inline-flex;">✉ ${esc(c.email)}</div>` : '<span style="color:var(--slate)">—</span>'}</td>
-      <td>${c.phone    && c.phone    !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.phone)}')" style="display:inline-flex;">✆ ${esc(c.phone)}</div>` : '<span style="color:var(--slate)">—</span>'}</td>
-      <td>${c.linkedin && c.linkedin !== 'N/A' ? `<div class="chip" onclick="copyVal('${esc(c.linkedin)}')" style="display:inline-flex;">⌂ Profile</div>` : '<span style="color:var(--slate)">—</span>'}</td>
-    </tr>`
-  ).join('');
-
-  // Invitation templates
-  function setTpl(id, text) {
-    const el = document.getElementById(id);
-    el.textContent = (text || '').replace(/\\n/g, '\n');
-    el.insertAdjacentHTML('afterbegin', `<button class="cp-btn" onclick="copyEl('${id}')">Copy</button>`);
-  }
-  setTpl('emailTpl', d.emailTemplate);
-  setTpl('smsTpl',   d.smsTemplate);
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   EXCEL EXPORT
-   ───────────────────────────────────────────────────────────────── */
-function exportExcel() {
-  if (!resultData) { toast('No results to export yet.'); return; }
-  const d  = resultData;
-  const wb = XLSX.utils.book_new();
-
-  // Sheet 1: Recommended
-  const ws1 = XLSX.utils.aoa_to_sheet([
-    ['Rank','Name','File','Match Score (%)','Experience','Key Skills','Strengths','Development Areas','Assessment','Email','Phone','LinkedIn'],
-    ...(d.topCandidates || []).map((c, i) => [
-      i + 1, c.name, c.fileName, c.matchScore, c.experience,
-      (c.keySkills  || []).join(', '),
-      (c.strengths  || []).join(', '),
-      (c.gaps       || []).join(', '),
-      c.whyHire, c.email, c.phone, c.linkedin,
-    ]),
-  ]);
-  ws1['!cols'] = [5,24,22,12,12,34,34,28,60,32,16,32].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws1, 'Recommended');
-
-  // Sheet 2: Not Recommended
-  const ws2 = XLSX.utils.aoa_to_sheet([
-    ['Name','File','Match Score (%)','Decision Rationale','Missing Criteria','Email','Phone'],
-    ...(d.rejectedCandidates || []).map(c => [
-      c.name, c.fileName, c.matchScore, c.whyRejected,
-      (c.missingRequirements || []).join(', '), c.email, c.phone,
-    ]),
-  ]);
-  ws2['!cols'] = [24,22,12,60,42,32,16].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws2, 'Not Recommended');
-
-  // Sheet 3: Interview Framework
-  const ws3 = XLSX.utils.aoa_to_sheet([
-    ['#','Category','Question','Assessment Focus','Ideal Answer Parameters'],
-    ...(d.interviewQuestions || []).map(q => [
-      q.number, q.category, q.question, q.whatToAssess, q.idealAnswerParameters,
-    ]),
-  ]);
-  ws3['!cols'] = [4,18,60,40,60].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws3, 'Interview Framework');
-
-  // Sheet 4: Contact Directory
-  const allC = [
-    ...(d.topCandidates      || []).map((c, i) => ({ ...c, status: `Rank #${i + 1}` })),
-    ...(d.rejectedCandidates || []).map(c      => ({ ...c, status: 'Not Recommended' })),
-  ];
-  const ws4 = XLSX.utils.aoa_to_sheet([
-    ['Name','Status','Email','Phone','LinkedIn'],
-    ...allC.map(c => [c.name, c.status, c.email || 'N/A', c.phone || 'N/A', c.linkedin || 'N/A']),
-  ]);
-  ws4['!cols'] = [26,22,36,18,36].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws4, 'Contact Directory');
-
-  // Sheet 5: Templates
-  const ws5 = XLSX.utils.aoa_to_sheet([
-    ['Template','Content'],
-    ['Email Invitation', (d.emailTemplate || '').replace(/\\n/g, '\n')],
-    [''],
-    ['SMS / WhatsApp',   (d.smsTemplate   || '').replace(/\\n/g, '\n')],
-  ]);
-  ws5['!cols'] = [20,100].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws5, 'Invitation Templates');
-
-  // Sheet 6: Position Summary
-  const ws6 = XLSX.utils.aoa_to_sheet([
-    ['Field','Details'],
-    ['Industry',         sIndustry],
-    ['Role',             sRole],
-    ['Target Country',   sCountry],
-    ['Scoring Engine',   'Rule-based offline engine (no AI)'],
-    ['Country Context',  d.countryContext  || ''],
-    ['Position Brief',   d.enhancedJobBrief || ''],
-  ]);
-  ws6['!cols'] = [18,100].map(w => ({ wch: w }));
-  XLSX.utils.book_append_sheet(wb, ws6, 'Position Summary');
-
-  const fname = `Meridian_${sRole.replace(/\s+/g,'_')}_${sCountry.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
-  XLSX.writeFile(wb, fname);
-  toast('Report exported successfully.');
-}
-
-/* ─────────────────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════
    UTILITIES
-   ───────────────────────────────────────────────────────────────── */
+   ═══════════════════════════════════════════════════════════ */
 function esc(s) {
-  return String(s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function copyVal(v)  { navigator.clipboard.writeText(v).then(() => toast('Copied to clipboard.')); }
-function copyEl(id)  {
-  const el = document.getElementById(id);
-  const t  = (el.innerText || el.textContent).replace(/^Copy\n?/, '').trim();
-  navigator.clipboard.writeText(t).then(() => toast('Copied to clipboard.'));
-}
-function toast(msg)  {
+function copyVal(v) { navigator.clipboard.writeText(v).then(() => toast('Copied!')); }
+function toast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
 function resetApp() {
-  files = []; resultData = null; selCtry = null; filtCtry = [...COUNTRIES];
+  files = []; resultData = null; selCtry = null; filtCtry = [...COUNTRIES]; invitationStore = {};
   ['industry','role','reqs','ctryInput','ctryVal'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
   document.getElementById('numPos').value   = '1';
   document.getElementById('expLevel').value = 'any';
-  document.getElementById('ctryNote').style.display = 'none';
   [1,2,3,4,5,6].forEach(i => {
-    const e = document.getElementById('ls' + i);
+    const e = document.getElementById('ls'+i);
     if (e) { e.classList.remove('run','done'); e.querySelector('.l-ic').textContent = '⬡'; }
   });
-  renderPills();
-  showPanel(1);
+  renderPills(); showPanel(1);
 }
 </script>
 </body>
